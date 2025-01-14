@@ -1,0 +1,109 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  font-size: 14px;
+}
+.v13_39 {
+  width: 100%;
+  height: 900px;
+  background: rgba(42,58,68,1);
+  opacity: 1;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  overflow: hidden;
+}
+.v13_40 {
+  width: 100%;
+  height: 900px;
+  background: url("../images/v13_40.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 1;
+  position: absolute;
+  top: 7px;
+  left: 346px;
+  overflow: hidden;
+}
+.v13_60 {
+  width: 718px;
+  height: 215px;
+  background: url("../images/v13_60.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  padding: 4px 0px;
+  margin: 24px;
+  opacity: 1;
+  position: absolute;
+  top: 342px;
+  left: 211px;
+  overflow: hidden;
+}
+.v13_59 {
+  width: 107px;
+  height: 57px;
+  background: url("../images/v13_59.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 1;
+  position: absolute;
+  top: 4px;
+  left: 0px;
+  overflow: hidden;
+}
+.v13_51 {
+  width: 159px;
+  color: rgba(255,255,255,1);
+  position: absolute;
+  top: 4px;
+  left: 131px;
+  font-family: Pixelify Sans;
+  font-weight: Regular;
+  font-size: 64px;
+  opacity: 1;
+  text-align: left;
+}
+.v13_54 {
+  width: 163px;
+  color: rgba(159,159,159,1);
+  position: absolute;
+  top: 4px;
+  left: 314px;
+  font-family: Pixelify Sans;
+  font-weight: Regular;
+  font-size: 64px;
+  opacity: 1;
+  text-align: left;
+}
+.v13_61 {
+  width: 718px;
+  color: rgba(159,159,159,1);
+  position: absolute;
+  top: 134px;
+  left: 0px;
+  font-family: Pixelify Sans;
+  font-weight: Regular;
+  font-size: 64px;
+  opacity: 1;
+  text-align: left;
+}
+.v13_42 {
+  width: 100%;
+  color: rgba(8,24,34,1);
+  position: absolute;
+  top: 64px;
+  left: 0px;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-family: Pixelify Sans;
+  font-weight: Regular;
+  font-size: 64px;
+  opacity: 1;
+  text-align: left;
+}
+.name {
+  color: #fff;
+}
