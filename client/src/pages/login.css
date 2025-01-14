@@ -1,0 +1,125 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+}
+
+.v9_2 {
+  width: 100%;
+  height: 100vh;
+  background: rgba(42,58,67,1);
+  opacity: 1;
+  position: relative;
+  overflow: hidden;
+}
+.v10_4 {
+  width: 100%;
+  height: 100vh;
+  background: rgba(255,255,255,0);
+  opacity: 1;
+  position: relative;
+  overflow: hidden;
+}
+.v11_2 {
+  width: 30vw;
+  color: rgba(159,159,159,1);
+  position: absolute;
+  top: 23vh;
+  left: 50%;
+  transform: translateX(-50%);
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-family: 'Pixelify Sans';
+  font-weight: Regular;
+  font-size: clamp(3rem, 8vw, 8rem);
+  opacity: 1;
+  text-align: center;
+}
+.v11_6 {
+  width: 50vw;
+  color: rgba(91,120,138,1);
+  position: absolute;
+  top: 8vh;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(1.5rem, 3vw, 3rem);
+  opacity: 1;
+  text-align: center;
+}
+.v11_19 {
+  width: 30vw;
+  min-width: 300px;
+  height: auto;
+  background: rgba(255,255,255,1);
+  padding: 1.5vh 2vw;
+  margin: 1vh auto;
+  opacity: 1;
+  position: absolute;
+  top: 54vh;
+  left: 50%;
+  transform: translateX(-50%);
+  overflow: hidden;
+}
+.v13_23 {
+  width: 100%;
+  color: rgba(0,0,0,1);
+  position: relative;
+  font-family: 'Pixelify Sans';
+  font-weight: Regular;
+  font-size: clamp(1.5rem, 2.5vw, 2.5rem);
+  opacity: 1;
+  text-align: center;
+}
+.v13_24 {
+  width: 30vw;
+  min-width: 300px;
+  height: auto;
+  background: rgba(255,255,255,0);
+  padding: 1.5vh 1vw;
+  margin: 1vh auto;
+  opacity: 1;
+  position: absolute;
+  top: 45vh;
+  left: 50%;
+  transform: translateX(-50%);
+  overflow: hidden;
+}
+.v14_11 {
+  width: 15vw;
+  height: 76vh;
+  background: url("../images/v14_11.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  opacity: 0.5;
+  position: absolute;
+  top: 12vh;
+  left: 12vw;
+  overflow: hidden;
+}
+.v11_7 {
+  width: 15vw;
+  height: 76vh;
+  background: url("../images/v11_7.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  opacity: 0.5;
+  position: absolute;
+  top: 12vh;
+  right: 12vw;
+  overflow: hidden;
+}
+
+/* Add media queries for better mobile responsiveness */
+@media screen and (max-width: 768px) {
+  .v14_11, .v11_7 {
+    display: none; /* Hide side images on mobile */
+  }
+  
+  .v11_19, .v13_24 {
+    width: 90vw;
+  }
+}

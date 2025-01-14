@@ -1,96 +1,84 @@
 * {
   box-sizing: border-box;
 }
+
 body {
-  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
 }
+
 .v74_28 {
   width: 100%;
-  height: 900px;
+  min-height: 100vh;
   background: rgba(42,58,67,1);
-  opacity: 1;
-  position: absolute;
-  top: 0px;
-  left: 0px;
+  position: relative;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.name {
-  color: #fff;
-}
-.name {
-  color: #fff;
-}
+
 .v73_55 {
-  width: 243px;
-  height: 572px;
-  background: url("../images/v73_55.png");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  opacity: 1;
+  width: clamp(200px, 20vw, 243px);
+  height: auto;
   position: absolute;
-  top: 96px;
-  left: 117px;
-  overflow: hidden;
+  top: 50%;
+  left: 10%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
-.v73_51 {
-  width: 243px;
+
+.v73_51, .v73_52, .v73_53, .v73_54 {
   color: rgba(159,159,159,1);
-  position: absolute;
-  top: 330px;
-  left: 0px;
-  font-family: Pixelify Sans;
-  font-weight: Regular;
-  font-size: 64px;
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: clamp(2rem, 4vw, 64px);
   opacity: 1;
   text-align: left;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
-.v73_54 {
-  width: 243px;
-  color: rgba(159,159,159,1);
-  position: absolute;
-  top: 495px;
-  left: 0px;
-  font-family: Pixelify Sans;
-  font-weight: Regular;
-  font-size: 64px;
-  opacity: 1;
-  text-align: left;
+
+.v73_51:hover, .v73_52:hover, .v73_53:hover, .v73_54:hover {
+  color: rgba(200,200,200,1);
+  transform: scale(1.1);
 }
-.v73_52 {
-  width: 243px;
-  color: rgba(159,159,159,1);
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  font-family: Pixelify Sans;
-  font-weight: Regular;
-  font-size: 64px;
-  opacity: 1;
-  text-align: left;
-}
-.v73_53 {
-  width: 243px;
-  color: rgba(159,159,159,1);
-  position: absolute;
-  top: 165px;
-  left: 0px;
-  font-family: Pixelify Sans;
-  font-weight: Regular;
-  font-size: 64px;
-  opacity: 1;
-  text-align: left;
-}
+
 .v74_50 {
-  width: 343px;
-  height: 527px;
+  width: clamp(200px, 30vw, 343px);
+  height: clamp(300px, 50vh, 527px);
   background: url("../images/v74_50.png");
   background-repeat: no-repeat;
   background-position: center center;
-  background-size: cover;
-  opacity: 1;
+  background-size: contain;
   position: absolute;
-  top: 300px;
-  left: 340px;
-  overflow: hidden;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Media queries for better mobile responsiveness */
+@media screen and (max-width: 768px) {
+  .v73_55 {
+    position: relative;
+    left: 0;
+    transform: none;
+    margin: 2rem auto;
+    align-items: center;
+  }
+
+  .v74_50 {
+    position: relative;
+    transform: none;
+    margin: 2rem auto;
+    left: auto;
+    top: auto;
+  }
+
+  .v74_28 {
+    flex-direction: column;
+    padding: 2rem;
+  }
 }

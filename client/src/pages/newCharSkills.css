@@ -1,0 +1,103 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+}
+
+.v17_8 {
+  width: 100%;
+  min-height: 100vh;
+  background: rgba(42,58,67,1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+.v21_93 {
+  color: rgba(159,159,159,1);
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: clamp(3rem, 8vw, 128px);
+  margin-top: 2rem;
+}
+
+.v24_90 {
+  color: rgba(159,159,159,1);
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: clamp(1.5rem, 3vw, 48px);
+  position: absolute;
+  top: 74px;
+  left: 5%;
+}
+
+.skills-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 4rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8rem;
+}
+
+.skills-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+/* Common styles for all skill spans */
+.v21_75, .v21_76, .v21_87, .v21_79, .v21_81,
+.v21_83, .v21_85, .v21_91, .v21_89, .v21_77 {
+  color: rgba(159,159,159,1);
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: clamp(1.2rem, 2.5vw, 44px);
+  text-align: left;
+  flex: 1;
+  min-width: 150px;
+}
+
+.next-button {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  padding: 0.5rem 2rem;
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: clamp(1rem, 2vw, 2rem);
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.next-button:hover {
+  transform: scale(1.1);
+}
+
+/* Media queries for better mobile responsiveness */
+@media screen and (max-width: 768px) {
+  .skills-container {
+    gap: 4rem;
+    margin: 2rem auto;
+  }
+
+  .skills-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .v21_75, .v21_76, .v21_87, .v21_79, .v21_81,
+  .v21_83, .v21_85, .v21_91, .v21_89, .v21_77 {
+    min-width: unset;
+    text-align: center;
+  }
+}
