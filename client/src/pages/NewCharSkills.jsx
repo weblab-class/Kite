@@ -1,33 +1,33 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './newCharSkills.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./newCharSkills.css";
 
 function NewCharSkills() {
   const navigate = useNavigate();
   const [total] = useState(400);
 
   const skills = [
-    { id: 'libraryUse', name: 'Library Use', value: 20 },
-    { id: 'listen', name: 'Listen', value: 20 },
-    { id: 'firstAid', name: 'First Aid', value: 30 },
-    { id: 'medicine', name: 'Medicine', value: 5 },
-    { id: 'fighting', name: 'Fighting', value: 25 },
-    { id: 'psychology', name: 'Psychology', value: 10 },
-    { id: 'dodge', name: 'Dodge', value: 20 },
-    { id: 'spotHidden', name: 'Spot Hidden', value: 25 },
-    { id: 'stealth', name: 'Stealth', value: 20 },
-    { id: 'intimidate', name: 'Intimidate', value: 15 }
+    { id: "libraryUse", name: "Library Use", value: 20 },
+    { id: "listen", name: "Listen", value: 20 },
+    { id: "firstAid", name: "First Aid", value: 30 },
+    { id: "medicine", name: "Medicine", value: 5 },
+    { id: "fighting", name: "Fighting", value: 25 },
+    { id: "psychology", name: "Psychology", value: 10 },
+    { id: "dodge", name: "Dodge", value: 20 },
+    { id: "spotHidden", name: "Spot Hidden", value: 25 },
+    { id: "stealth", name: "Stealth", value: 20 },
+    { id: "intimidate", name: "Intimidate", value: 15 },
   ];
 
   const handleNext = () => {
-    navigate('/next-page'); // Replace with your next route
+    navigate("/story"); // Replace with your next route
   };
 
   return (
     <div className="v17_8">
       <span className="v21_93">Skills</span>
       <span className="v24_90">Total: {total}</span>
-      
+
       <div className="skills-container">
         {/* First Row */}
         <div className="skills-row">
@@ -48,15 +48,11 @@ function NewCharSkills() {
         </div>
       </div>
 
-      <button 
-        className="next-button" 
-        onClick={handleNext}
-        type="button"
-      >
+      <button className="next-button" onClick={handleNext} type="button">
         Next
       </button>
     </div>
   );
 }
 
-export default NewCharSkills; 
+export default NewCharSkills;

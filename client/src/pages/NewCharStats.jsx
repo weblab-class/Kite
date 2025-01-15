@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './newCharStats.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./newCharStats.css";
 
 function NewCharStats() {
   const navigate = useNavigate();
@@ -8,17 +8,17 @@ function NewCharStats() {
 
   const handleDiceClick = () => {
     // Add dice rolling logic here
-    console.log('Rolling dice...');
+    console.log("Rolling dice...");
   };
 
   const handleNext = () => {
-    navigate('/next-step'); // Replace with your next route
+    navigate("/new-character-skills"); // Replace with your next route
   };
 
   return (
     <div className="v17_7">
-      <div 
-        className="v22_23" 
+      <div
+        className="v22_23"
         onClick={handleDiceClick}
         role="button"
         tabIndex={0}
@@ -48,16 +48,11 @@ function NewCharStats() {
         Click on the dice to roll the stats for your character
       </span>
       <span className="v22_62">Total: {total}</span>
-      <span 
-        className="v24_88" 
-        onClick={handleNext}
-        role="button"
-        tabIndex={0}
-      >
+      <span className="v24_88" onClick={handleNext} role="button" tabIndex={0}>
         Next
       </span>
     </div>
   );
 }
 
-export default NewCharStats; 
+export default NewCharStats;

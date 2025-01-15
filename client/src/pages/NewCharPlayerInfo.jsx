@@ -1,12 +1,12 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import './newCharPlayerInfo.css';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import "./newCharPlayerInfo.css";
 
 function NewCharPlayerInfo() {
   const navigate = useNavigate();
 
   const handleNext = () => {
-    navigate('/next-step'); // Replace with your next route
+    navigate("/new-character-stats"); // Replace with your next route
   };
 
   return (
@@ -31,4 +31,4 @@ function NewCharPlayerInfo() {
   );
 }
 
-export default NewCharPlayerInfo; 
+export default NewCharPlayerInfo;
