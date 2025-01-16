@@ -15,7 +15,10 @@ const path = require("path");
 const app = express();
 const port = 3000;
 
-const test_data = {
+// allow us to make post requests
+app.use(express.json());
+
+const character1 = {
   _id: "id1",
   player_name: "Joe",
   character_name: "Joe's Character",
@@ -26,19 +29,48 @@ const test_data = {
   },
 };
 
-// allow us to make post requests
-app.use(express.json());
+const character2 = {
+  _id: "id2",
+  player_name: "Susan",
+  character_name: "Suzie",
+  stats: {
+    health: 100,
+    attack: 10,
+    defense: 5,
+  },
+};
+
+const character3 = {
+  _id: "id3",
+  player_name: "Alice",
+  character_name: "Alicia",
+  stats: {
+    health: 100,
+    attack: 10,
+    defense: 5,
+  },
+};
+
+const characters = [character1, character2, character3];
 
 app.get("/api/characters", (req, res) => {
-  res.send(test_data);
+  console.log("GET /api/characters request received");
+  console.log("Sending characters:", characters);
+  res.send(characters);
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.post("/api/characters", (req, res) => {
+  const new_character = req.body;
+  characters.push(new_character);
+  res.send(new_character);
 });
 
 // anything bad happens, we log
 app.all("*", (req, res) => {
   console.log(`Route not found: ${req.method} ${req.url}`);
   res.status(404).send({ msg: "Route not found" });
+});
+
+app.listen(port, () => {
+  console.log(`Server running on port: ${port}`);
 });

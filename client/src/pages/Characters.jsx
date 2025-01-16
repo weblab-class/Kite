@@ -13,18 +13,35 @@ function Characters() {
   };
 
   useEffect(() => {
-    get("/api/characters").then((characters) => {
-      setCharacters(characters);
-    });
+    console.log("Fetching characters...");
+    get("/api/characters")
+      .then((characterData) => {
+        console.log("Raw response:", characterData);
+        setCharacters(characterData);
+      })
+      .catch((error) => {
+        console.error("Error fetching characters:", error);
+      });
   }, []);
+
+  let charactersList = null;
+  const hasCharacters = characters.length !== 0;
+  if (hasCharacters) {
+    charactersList = characters.map((character) => (
+      <span key={`Character_${character._id}`} className="v13_51">
+        {character.character_name}
+      </span>
+    ));
+  } else {
+    charactersList = <span>No characters found</span>;
+  }
 
   return (
     <div className="v13_39">
       <div className="v13_40">
         <div className="v13_60">
           <div className="v13_59"></div>
-          <span className="v13_51">Alicia</span>
-          <span className="v13_54">Suzie</span>
+          {charactersList}
           <span onClick={handleCreateNewCharacterClick} className="v13_61">
             Create New Character
           </span>
