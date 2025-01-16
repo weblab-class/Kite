@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 // To use styles, import the necessary CSS files
 import "./utilities.css";
 import "./App.css";
+import "./styles/global.css";
 
 /**
  * Define the "App" component as a function.

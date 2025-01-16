@@ -1,37 +1,30 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./start.css";
 
 function Start() {
   const navigate = useNavigate();
 
   const handleRulesClick = () => {
-    navigate("/rules"); // You'll need to create this route
+    navigate("/rules");
   };
 
   const handleCharactersClick = () => {
-    navigate("/characters"); // You'll need to create this route
+    navigate("/characters");
   };
 
   return (
-    <div className="v14_44">
-      <div className="v14_45" />
-      <span
-        className="v14_47"
-        onClick={handleCharactersClick}
-        role="button"
-        tabIndex={0}
-      >
+    <div className="page-container">
+      <div className="start-background" />
+      <button className="start-button" onClick={handleCharactersClick}>
         Characters
-      </span>
-      <span
-        className="v14_46"
+      </button>
+      <button
+        className="start-button"
         onClick={handleRulesClick}
-        role="button"
-        tabIndex={0}
+        style={{ bottom: "10%" }}
       >
         Rules
-      </span>
+      </button>
     </div>
   );
 }

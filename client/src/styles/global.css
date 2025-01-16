@@ -1,0 +1,224 @@
+/* Reset Styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+}
+
+/* Common Layout Styles */
+.page-container {
+  width: 100%;
+  min-height: 100vh;
+  background: rgba(42, 58, 68, 1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-wrapper {
+  width: 90%;
+  max-width: 1200px;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+/* Character Page Specific */
+.character-section {
+  width: 100%;
+  max-width: 718px;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.octopus-icon {
+  width: clamp(80px, 10vw, 107px);
+  height: clamp(40px, 5vw, 57px);
+  background: url("../images/octopus.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  margin-right: 1rem;
+}
+
+/* Start Page Specific */
+.start-background {
+  background: url("../images/start-background.png");
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+}
+
+.start-button {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 3rem;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+/* Login Page Specific */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.login-input {
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  background: transparent;
+  border: 2px solid rgba(159, 159, 159, 1);
+  color: white;
+  width: 300px;
+}
+
+/* New Character Pages Specific */
+.character-form {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.stat-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+
+/* Common Button Styles */
+.character-button {
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: clamp(2rem, 4vw, 4rem);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  margin: 0 1rem;
+  background: none;
+  border: none;
+  padding: 0;
+  color: rgba(159, 159, 159, 1);
+}
+
+.character-button.active {
+  color: rgba(255, 255, 255, 1);
+}
+
+.character-button:hover {
+  transform: scale(1.1);
+}
+
+.create-character-button {
+  width: 100%;
+  color: rgba(159, 159, 159, 1);
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: clamp(2rem, 4vw, 4rem);
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  margin-top: 2rem;
+  background: none;
+  border: none;
+}
+
+.create-character-button:hover {
+  transform: scale(1.05);
+}
+
+/* Common Text Styles */
+.page-title {
+  color: rgba(8, 24, 34, 1);
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Story Page Specific */
+.story-container {
+  width: 100%;
+  max-width: 800px;
+  padding: 2rem;
+  color: white;
+  font-family: "Pixelify Sans", sans-serif;
+}
+
+.story-text {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+/* Rules Page Specific */
+.rules-container {
+  width: 100%;
+  max-width: 800px;
+  padding: 2rem;
+  color: white;
+  font-family: "Pixelify Sans", sans-serif;
+}
+
+.rules-text {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+/* Media Queries */
+@media screen and (max-width: 768px) {
+  .content-wrapper {
+    padding: 1rem;
+  }
+
+  .character-section {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .octopus-icon {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+
+  .character-button {
+    margin: 0.5rem 0;
+  }
+
+  .login-input {
+    width: 90%;
+  }
+}

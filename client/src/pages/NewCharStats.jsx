@@ -1,56 +1,68 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./newCharStats.css";
 
 function NewCharStats() {
   const navigate = useNavigate();
-  const [total, setTotal] = useState(495); // 425+70
+  const [total, setTotal] = useState(495);
 
   const handleDiceClick = () => {
-    // Add dice rolling logic here
     console.log("Rolling dice...");
   };
 
   const handleNext = () => {
-    navigate("/new-character-skills"); // Replace with your next route
+    navigate("/new-character-skills");
   };
 
   return (
-    <div className="v17_7">
-      <div
-        className="v22_23"
-        onClick={handleDiceClick}
-        role="button"
-        tabIndex={0}
-      />
-      <div className="v22_24" />
-      <div className="v22_50">
-        <span className="v22_51">Dexterity</span>
-        <span className="v22_52">Education</span>
-        <span className="v22_53">Power</span>
-        <span className="v22_54">Size</span>
-        <span className="v22_59">Wisdom/Sanity</span>
-        <span className="v22_55">Appearance</span>
-        <span className="v22_56">Constitution</span>
-        <span className="v22_57">Strength</span>
-        <span className="v22_61">80</span>
-        <span className="v22_63">40</span>
-        <span className="v22_64">50</span>
-        <span className="v22_66">45</span>
-        <span className="v22_67">60</span>
-        <span className="v22_69">40</span>
-        <span className="v22_70">50</span>
-        <span className="v22_71">60</span>
-        <span className="v22_72">70</span>
-        <span className="v22_60">Luck</span>
+    <div className="page-container">
+      <div className="content-wrapper">
+        <h1 className="page-title">Character Stats</h1>
+        <div className="character-form">
+          <p className="rules-text">
+            Click on the dice to roll the stats for your character
+          </p>
+          <div className="stat-container">
+            <span className="rules-text">Dexterity</span>
+            <span className="rules-text">80</span>
+          </div>
+          <div className="stat-container">
+            <span className="rules-text">Education</span>
+            <span className="rules-text">40</span>
+          </div>
+          <div className="stat-container">
+            <span className="rules-text">Power</span>
+            <span className="rules-text">50</span>
+          </div>
+          <div className="stat-container">
+            <span className="rules-text">Size</span>
+            <span className="rules-text">45</span>
+          </div>
+          <div className="stat-container">
+            <span className="rules-text">Wisdom/Sanity</span>
+            <span className="rules-text">60</span>
+          </div>
+          <div className="stat-container">
+            <span className="rules-text">Appearance</span>
+            <span className="rules-text">40</span>
+          </div>
+          <div className="stat-container">
+            <span className="rules-text">Constitution</span>
+            <span className="rules-text">50</span>
+          </div>
+          <div className="stat-container">
+            <span className="rules-text">Strength</span>
+            <span className="rules-text">60</span>
+          </div>
+          <div className="stat-container">
+            <span className="rules-text">Luck</span>
+            <span className="rules-text">70</span>
+          </div>
+          <p className="rules-text">Total: {total}</p>
+          <button className="character-button" onClick={handleNext}>
+            Next
+          </button>
+        </div>
       </div>
-      <span className="v22_26">
-        Click on the dice to roll the stats for your character
-      </span>
-      <span className="v22_62">Total: {total}</span>
-      <span className="v24_88" onClick={handleNext} role="button" tabIndex={0}>
-        Next
-      </span>
     </div>
   );
 }

@@ -1,26 +1,51 @@
 import React from "react";
-import "./characters.css";
 import { useNavigate } from "react-router-dom";
+import octopusImage from "../images/octopus.png";
+
+const CharacterButton = ({ name, isActive, onClick }) => (
+  <button
+    className={`character-button ${isActive ? "active" : ""}`}
+    onClick={onClick}
+  >
+    {name}
+  </button>
+);
 
 function Characters() {
   const navigate = useNavigate();
 
-  const handleCreateNewCharacterClick = () => {
+  const handleCharacterSelect = (characterName) => {
+    // TODO: Implement character selection logic
+    console.log(`Selected character: ${characterName}`);
+  };
+
+  const handleCreateNewCharacter = () => {
     navigate("/new-character-player-info");
   };
 
   return (
-    <div className="v13_39">
-      <div className="v13_40">
-        <div className="v13_60">
-          <div className="v13_59"></div>
-          <span className="v13_51">Alicia</span>
-          <span className="v13_54">Suzie</span>
-          <span onClick={handleCreateNewCharacterClick} className="v13_61">
+    <div className="page-container">
+      <div className="content-wrapper">
+        <h1 className="page-title">Choice ur character</h1>
+        <div className="character-section">
+          <div className="octopus-icon" />
+          <CharacterButton
+            name="Alicia"
+            isActive={true}
+            onClick={() => handleCharacterSelect("Alicia")}
+          />
+          <CharacterButton
+            name="Suzie"
+            isActive={false}
+            onClick={() => handleCharacterSelect("Suzie")}
+          />
+          <button
+            className="create-character-button"
+            onClick={handleCreateNewCharacter}
+          >
             Create New Character
-          </span>
+          </button>
         </div>
-        <span className="v13_42">Choice ur character</span>
       </div>
     </div>
   );
