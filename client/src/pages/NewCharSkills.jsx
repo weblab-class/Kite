@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./newCharSkills.css";
 
 function NewCharSkills() {
   const navigate = useNavigate();
@@ -20,37 +19,28 @@ function NewCharSkills() {
   ];
 
   const handleNext = () => {
-    navigate("/story"); // Replace with your next route
+    navigate("/story");
   };
 
   return (
-    <div className="v17_8">
-      <span className="v21_93">Skills</span>
-      <span className="v24_90">Total: {total}</span>
-
-      <div className="skills-container">
-        {/* First Row */}
-        <div className="skills-row">
-          <span className="v21_75">{skills[0].name}</span>
-          <span className="v21_76">{skills[1].name}</span>
-          <span className="v21_87">{skills[2].name}</span>
-          <span className="v21_79">{skills[3].name}</span>
-          <span className="v21_81">{skills[4].name}</span>
-        </div>
-
-        {/* Second Row */}
-        <div className="skills-row">
-          <span className="v21_83">{skills[5].name}</span>
-          <span className="v21_85">{skills[6].name}</span>
-          <span className="v21_91">{skills[7].name}</span>
-          <span className="v21_89">{skills[8].name}</span>
-          <span className="v21_77">{skills[9].name}</span>
+    <div className="page-container">
+      <div className="content-wrapper">
+        <h1 className="page-title">Skills</h1>
+        <div className="character-form">
+          <p className="rules-text">Total: {total}</p>
+          <div className="skill-grid">
+            {skills.map((skill) => (
+              <div key={skill.id} className="stat-container">
+                <span className="rules-text">{skill.name}</span>
+                <span className="rules-text">{skill.value}</span>
+              </div>
+            ))}
+          </div>
+          <button className="character-button" onClick={handleNext}>
+            Next
+          </button>
         </div>
       </div>
-
-      <button className="next-button" onClick={handleNext} type="button">
-        Next
-      </button>
     </div>
   );
 }

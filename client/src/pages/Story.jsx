@@ -1,25 +1,22 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import './Story.css';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function Story() {
   const navigate = useNavigate();
 
   const handleNavigation = (path) => {
-    switch(path) {
-      case 'save':
-        // Add save functionality
-        console.log('Save game');
+    switch (path) {
+      case "save":
+        console.log("Save game");
         break;
-      case 'load':
-        // Add load functionality
-        console.log('Load game');
+      case "load":
+        console.log("Load game");
         break;
-      case 'rules':
-        navigate('/rules');
+      case "rules":
+        navigate("/rules");
         break;
-      case 'chars':
-        navigate('/characters');
+      case "chars":
+        navigate("/characters");
         break;
       default:
         break;
@@ -27,44 +24,37 @@ function Story() {
   };
 
   return (
-    <div className="v74_28">
-      <div className="v73_55">
-        <span 
-          className="v73_52" 
-          onClick={() => handleNavigation('save')}
-          role="button"
-          tabIndex={0}
-        >
-          {`> Save`}
-        </span>
-        <span 
-          className="v73_53" 
-          onClick={() => handleNavigation('load')}
-          role="button"
-          tabIndex={0}
-        >
-          {`> Load`}
-        </span>
-        <span 
-          className="v73_51" 
-          onClick={() => handleNavigation('rules')}
-          role="button"
-          tabIndex={0}
-        >
-          {`> Rules`}
-        </span>
-        <span 
-          className="v73_54" 
-          onClick={() => handleNavigation('chars')}
-          role="button"
-          tabIndex={0}
-        >
-          {`> Chars`}
-        </span>
+    <div className="page-container">
+      <div className="content-wrapper">
+        <div className="story-container">
+          <button
+            className="character-button"
+            onClick={() => handleNavigation("save")}
+          >
+            {`> Save`}
+          </button>
+          <button
+            className="character-button"
+            onClick={() => handleNavigation("load")}
+          >
+            {`> Load`}
+          </button>
+          <button
+            className="character-button"
+            onClick={() => handleNavigation("rules")}
+          >
+            {`> Rules`}
+          </button>
+          <button
+            className="character-button"
+            onClick={() => handleNavigation("chars")}
+          >
+            {`> Chars`}
+          </button>
+        </div>
       </div>
-      <div className="v74_50" />
     </div>
   );
 }
 
-export default Story; 
+export default Story;

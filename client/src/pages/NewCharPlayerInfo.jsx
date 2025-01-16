@@ -1,32 +1,43 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./newCharPlayerInfo.css";
 
 function NewCharPlayerInfo() {
   const navigate = useNavigate();
 
   const handleNext = () => {
-    navigate("/new-character-stats"); // Replace with your next route
+    navigate("/new-character-stats");
   };
 
   return (
-    <div className="v16_6">
-      <div className="v22_39">
-        <span className="v22_10">Character Name:</span>
-        <span className="v22_14">Age: </span>
-        <span className="v22_11">Job:</span>
-        <span className="v22_15">Gender:</span>
-        <span className="v22_12">Medium</span>
-        <span className="v22_13">Detective</span>
-        <span className="v22_8">Player Name:</span>
-        <span className="v95_57">Test</span>
-        <span className="v95_59">Name</span>
-        <span className="v95_60">100</span>
-        <span className="v95_61">Helicopter</span>
+    <div className="page-container">
+      <div className="content-wrapper">
+        <div className="character-form">
+          <h1 className="page-title">Player Information</h1>
+          <div className="form-group">
+            <label className="rules-text">Player Name:</label>
+            <input type="text" className="login-input" defaultValue="Test" />
+          </div>
+          <div className="form-group">
+            <label className="rules-text">Character Name:</label>
+            <input type="text" className="login-input" defaultValue="Name" />
+          </div>
+          <div className="form-group">
+            <label className="rules-text">Age:</label>
+            <input type="text" className="login-input" defaultValue="100" />
+          </div>
+          <div className="form-group">
+            <label className="rules-text">Job:</label>
+            <input
+              type="text"
+              className="login-input"
+              defaultValue="Detective"
+            />
+          </div>
+          <button className="character-button" onClick={handleNext}>
+            Next
+          </button>
+        </div>
       </div>
-      <span className="v24_86" onClick={handleNext} role="button" tabIndex={0}>
-        Next
-      </span>
     </div>
   );
 }
