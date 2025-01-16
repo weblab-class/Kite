@@ -8,7 +8,7 @@ import App from "./App";
 import NotFound from "./pages/NotFound";
 import NewCharPlayerInfo from "./pages/NewCharPlayerInfo";
 import NewCharStats from "./pages/NewCharStats";
-import NewCharSkills from "./pages/newCharSkills";
+import NewCharSkills from "./pages/NewCharSkills";
 import Story from "./pages/Story";
 import {
   createBrowserRouter,
