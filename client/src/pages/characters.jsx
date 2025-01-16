@@ -3,11 +3,19 @@ import "./characters.css";
 import { useNavigate } from "react-router-dom";
 
 function Characters() {
+  const [characters, setCharacters] = useState([]);
+
   const navigate = useNavigate();
 
   const handleCreateNewCharacterClick = () => {
     navigate("/new-character-player-info");
   };
+
+  useEffect(() => {
+    get("api/characters").then((characters) => {
+      setCharacters(characters);
+    });
+  });
 
   return (
     <div className="v13_39">

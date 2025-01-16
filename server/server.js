@@ -29,6 +29,10 @@ const test_data = {
 // allow us to make post requests
 app.use(express.json());
 
+app.get("/api/characters", (req, res) => {
+  res.send(test_data);
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
