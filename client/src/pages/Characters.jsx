@@ -1,6 +1,7 @@
-import React from "react";
-import "./characters.css";
+import React, { useState, useEffect } from "react";
+import "./Characters.css";
 import { useNavigate } from "react-router-dom";
+import { get } from "../utilities";
 
 function Characters() {
   const [characters, setCharacters] = useState([]);
@@ -12,10 +13,10 @@ function Characters() {
   };
 
   useEffect(() => {
-    get("api/characters").then((characters) => {
+    get("/api/characters").then((characters) => {
       setCharacters(characters);
     });
-  });
+  }, []);
 
   return (
     <div className="v13_39">
