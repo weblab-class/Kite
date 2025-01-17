@@ -1,30 +1,90 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import FormField from "../components/FormField";
 import "./newCharPlayerInfo.css";
 
 function NewCharPlayerInfo() {
   const navigate = useNavigate();
+  const [selectedJob, setSelectedJob] = useState("medium");
+  const [formData, setFormData] = useState({
+    characterName: "",
+    age: "",
+    gender: "",
+    playerName: "",
+  });
+
+  const handleInputChange = (field) => (event) => {
+    setFormData({
+      ...formData,
+      [field]: event.target.value,
+    });
+  };
 
   const handleNext = () => {
-    navigate("/new-character-stats"); // Replace with your next route
+    navigate("/new-character-stats");
   };
 
   return (
-    <div className="v16_6">
-      <div className="v22_39">
-        <span className="v22_10">Character Name:</span>
-        <span className="v22_14">Age: </span>
-        <span className="v22_11">Job:</span>
-        <span className="v22_15">Gender:</span>
-        <span className="v22_12">Medium</span>
-        <span className="v22_13">Detective</span>
-        <span className="v22_8">Player Name:</span>
-        <span className="v95_57">Test</span>
-        <span className="v95_59">Name</span>
-        <span className="v95_60">100</span>
-        <span className="v95_61">Helicopter</span>
+    <div className="character-page">
+      <div className="character-form">
+        <FormField
+          label="Character Name:"
+          value={formData.characterName}
+          onChange={handleInputChange("characterName")}
+          position="character-name"
+        />
+        <FormField
+          label="Age:"
+          value={formData.age}
+          onChange={handleInputChange("age")}
+          position="age"
+        />
+        <div className="form-field">
+          <label className="form-label">Job:</label>
+          <div className="job-options">
+            <label className="job-option">
+              <input
+                type="radio"
+                name="job"
+                value="medium"
+                checked={selectedJob === "medium"}
+                onChange={(e) => setSelectedJob(e.target.value)}
+                className="job-radio"
+              />
+              <span className="job-label-text">Medium</span>
+            </label>
+            <label className="job-option">
+              <input
+                type="radio"
+                name="job"
+                value="detective"
+                checked={selectedJob === "detective"}
+                onChange={(e) => setSelectedJob(e.target.value)}
+                className="job-radio"
+              />
+              <span className="job-label-text">Detective</span>
+            </label>
+          </div>
+        </div>
+        <FormField
+          label="Gender:"
+          value={formData.gender}
+          onChange={handleInputChange("gender")}
+          position="gender"
+        />
+        <FormField
+          label="Player Name:"
+          value={formData.playerName}
+          onChange={handleInputChange("playerName")}
+          position="player-name"
+        />
       </div>
-      <span className="v24_86" onClick={handleNext} role="button" tabIndex={0}>
+      <span
+        className="next-button"
+        onClick={handleNext}
+        role="button"
+        tabIndex={0}
+      >
         Next
       </span>
     </div>

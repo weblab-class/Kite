@@ -1,0 +1,29 @@
+.form-field {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--l);
+  font-family: "Pixelify Sans", sans-serif;
+}
+
+.form-label {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  color: rgba(159, 159, 159, 1);
+  min-width: 250px;
+  padding-right: var(--xl);
+}
+
+.form-input {
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  color: rgba(255, 255, 255, 1);
+  background: transparent;
+  border: 2px solid rgba(159, 159, 159, 1);
+  border-radius: var(--xs);
+  padding: var(--s);
+  width: 200px;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 1);
+}

@@ -5,6 +5,8 @@ node_modules/
 
 # Testing
 /coverage
+client/src/components/Card.css
+client/src/components/Card.jsx
 
 # Production
 /build
