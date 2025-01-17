@@ -1,13 +1,14 @@
 import React from "react";
-import { View, Text } from "react-native-web";
-import { useNavigate } from "react-router-dom";
+import { GoogleLogin } from '@react-oauth/google';
+import { useNavigate } from 'react-router-dom';
 import "./login.css";
 
 function Login() {
   const navigate = useNavigate();
 
-  const handleStartClick = () => {
-    navigate("/start");
+  const handleLogin = (credentialResponse) => {
+    console.log(credentialResponse);
+    navigate('/start');
   };
 
   return (
@@ -16,9 +17,10 @@ function Login() {
         <span className="v11_2">Smog</span>
         <span className="v11_6">Made with ❤️ by Susan and Alice</span>
         <div className="v11_19">
-          <span onClick={handleStartClick} className="v13_23">
-            sign in with Google
-          </span>
+          <GoogleLogin
+            onSuccess={handleLogin}
+            onError={() => console.log('Login Failed')}
+          />
         </div>
         <div className="v13_24"></div>
       </div>
