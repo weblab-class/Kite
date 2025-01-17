@@ -39,11 +39,6 @@ body {
   font-family: "Pixelify Sans", sans-serif;
   font-size: clamp(1.5rem, 3vw, 2.5rem);
   position: absolute;
-}
-
-/* Combined label and value styles */
-.label,
-.value {
   color: rgba(159, 159, 159, 1);
 }
 
@@ -108,7 +103,6 @@ body {
 }
 
 .next-button {
-  color: rgba(255, 255, 255, 1);
   bottom: 5%;
   right: 5%;
   cursor: pointer;
@@ -126,15 +120,10 @@ body {
     padding: 1rem;
   }
 
-  .label,
-  .value,
-  .next-button {
-    font-size: clamp(1rem, 4vw, 1.5rem);
-  }
-
   .next-button {
     bottom: 2%;
     right: 2%;
+    font-size: clamp(1rem, 4vw, 1.5rem);
   }
 }
 

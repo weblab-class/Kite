@@ -17,13 +17,11 @@
   font-size: clamp(1.5rem, 3vw, 2.5rem);
   color: rgba(255, 255, 255, 1);
   background: transparent;
-  border: 2px solid rgba(159, 159, 159, 1);
-  border-radius: var(--xs);
+  border: none;
   padding: var(--s);
   width: 200px;
 }
 
 .form-input:focus {
   outline: none;
-  border-color: rgba(255, 255, 255, 1);
 }
