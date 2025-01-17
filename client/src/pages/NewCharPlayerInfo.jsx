@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FormField from "../components/FormField";
 import "./newCharPlayerInfo.css";
+import { post } from "../utilities.js";
 
 function NewCharPlayerInfo() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ function NewCharPlayerInfo() {
   };
 
   const handleNext = () => {
+    post("/api/new-character", { player_info: formData });
     navigate("/new-character-stats");
   };
 

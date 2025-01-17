@@ -53,16 +53,20 @@ const character3 = {
 
 const characters = [character1, character2, character3];
 
+const character_new = {};
+
 app.get("/api/characters", (req, res) => {
   console.log("GET /api/characters request received");
   console.log("Sending characters:", characters);
   res.send(characters);
 });
 
-app.post("/api/characters", (req, res) => {
-  const new_character = req.body;
-  characters.push(new_character);
-  res.send(new_character);
+app.post("/api/new-character", (req, res) => {
+  const new_character_info = req.body.player_info;
+  Object.assign(character_new, new_character_info);
+  // characters.push(new_character_info);
+  console.log(character_new);
+  res.send(new_character_info);
 });
 
 // anything bad happens, we log
