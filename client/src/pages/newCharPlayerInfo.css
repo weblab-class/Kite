@@ -1,21 +1,28 @@
 * {
   box-sizing: border-box;
-}
-
-body {
   margin: 0;
   padding: 0;
-  font-size: 16px;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 .character-page {
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   min-height: 100vh;
-  background: rgba(42, 58, 67, 1);
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: rgba(42,58,67,1);
+  opacity: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   overflow: hidden;
 }
 
@@ -37,7 +44,7 @@ body {
 .value,
 .next-button {
   font-family: "Pixelify Sans", sans-serif;
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-size: clamp(3rem, 5vw, 4rem);
   position: absolute;
   color: rgba(159, 159, 159, 1);
 }
@@ -123,7 +130,7 @@ body {
   .next-button {
     bottom: 2%;
     right: 2%;
-    font-size: clamp(1rem, 4vw, 1.5rem);
+    font-size: clamp(2rem, 3vw, 3rem);
   }
 }
 
@@ -144,7 +151,7 @@ body {
 
 .job-label-text {
   font-family: "Pixelify Sans", sans-serif;
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-size: clamp(1rem, 2vw, 1.5rem);
   color: rgba(159, 159, 159, 1);
 }
 

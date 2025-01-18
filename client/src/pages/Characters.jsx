@@ -33,7 +33,8 @@ function Characters() {
       </span>
     ));
   } else {
-    charactersList = <span>No characters found</span>;
+    charactersList = <span className="find_character">
+      No characters found</span>;
   }
 
   return (
@@ -46,7 +47,7 @@ function Characters() {
             Create New Character
           </span>
         </div>
-        <span className="v13_42">Choice ur character</span>
+        <span className="v13_42">Choose ur character</span>
       </div>
     </div>
   );

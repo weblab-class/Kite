@@ -2,14 +2,17 @@
   display: flex;
   align-items: center;
   margin-bottom: var(--l);
+  margin-left: 10%;
   font-family: "Pixelify Sans", sans-serif;
+  width: fit-content; 
 }
 
 .form-label {
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-size: clamp(1.5rem, 3vw, 2rem);
   color: rgba(159, 159, 159, 1);
   min-width: 250px;
   padding-right: var(--xl);
+  text-align: left;
 }
 
 .form-input {

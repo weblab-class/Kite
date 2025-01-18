@@ -15,14 +15,13 @@ function Login() {
     <div className="v9_2">
       <div className="v10_4">
         <span className="v11_2">Smog</span>
-        <span className="v11_6">Made with ❤️ by Susan and Alice</span>
-        <div className="v11_19">
-          <GoogleLogin
+        <span className="v11_6">Made with &lt;3 by Susan and Alice</span>
+        <div className="v13_24">
+        <GoogleLogin
             onSuccess={handleLogin}
             onError={() => console.log('Login Failed')}
-          />
+          /> 
         </div>
-        <div className="v13_24"></div>
       </div>
       <div className="v14_11"></div>
       <div className="v11_7"></div>

@@ -48,9 +48,10 @@ function NewCharSkills() {
         </div>
       </div>
 
-      <button className="next-button" onClick={handleNext} type="button">
+      <span className="next-button" onClick={handleNext} type="button">
         Next
-      </button>
+      </span>
+
     </div>
   );
 }

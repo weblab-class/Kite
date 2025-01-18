@@ -1,18 +1,28 @@
 * {
   box-sizing: border-box;
-}
-body {
-  font-size: 16px;
   margin: 0;
   padding: 0;
 }
 
-.v9_2 {
+html, body, #root {
   width: 100%;
   height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.v9_2 {
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
   background: rgba(42,58,67,1);
   opacity: 1;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   overflow: hidden;
 }
 .v10_4 {
@@ -27,12 +37,12 @@ body {
   width: 30vw;
   color: rgba(159,159,159,1);
   position: absolute;
-  top: 23vh;
+  top: 25vh;
   left: 50%;
   transform: translateX(-50%);
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   font-family: 'Pixelify Sans';
-  font-weight: Regular;
+  font-weight: normal;
   font-size: clamp(3rem, 8vw, 8rem);
   opacity: 1;
   text-align: center;
@@ -41,10 +51,12 @@ body {
   width: 50vw;
   color: rgba(91,120,138,1);
   position: absolute;
-  top: 8vh;
+  top: 12vh;
   left: 50%;
   transform: translateX(-50%);
-  font-size: clamp(1.5rem, 3vw, 3rem);
+  font-family: 'Pixelify Sans';
+  font-weight: normal;
+  font-size: clamp(1.5rem, 2.5vw, 2.3rem);
   opacity: 1;
   text-align: center;
 }
@@ -67,24 +79,24 @@ body {
   color: rgba(0,0,0,1);
   position: relative;
   font-family: 'Pixelify Sans';
-  font-weight: Regular;
+  font-weight: normal;
   font-size: clamp(1.5rem, 2.5vw, 2.5rem);
   opacity: 1;
   text-align: center;
 }
 .v13_24 {
-  width: 30vw;
-  min-width: 300px;
+  width: 1vw;
+  min-width: 20px;
   height: auto;
-  background: rgba(255,255,255,0);
-  padding: 1.5vh 1vw;
-  margin: 1vh auto;
-  opacity: 1;
   position: absolute;
-  top: 45vh;
+  top: 70vh;
   left: 50%;
-  transform: translateX(-50%);
-  overflow: hidden;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  scale: 1.5;
 }
 .v14_11 {
   width: 15vw;
@@ -96,7 +108,7 @@ body {
   opacity: 0.5;
   position: absolute;
   top: 12vh;
-  left: 12vw;
+  left: 5vw;
   overflow: hidden;
 }
 .v11_7 {
@@ -109,7 +121,7 @@ body {
   opacity: 0.5;
   position: absolute;
   top: 12vh;
-  right: 12vw;
+  right: 5vw;
   overflow: hidden;
 }
 
@@ -119,7 +131,13 @@ body {
     display: none; /* Hide side images on mobile */
   }
   
-  .v11_19, .v13_24 {
+  .v11_19, .v13_24{
     width: 90vw;
   }
 }
+
+.rubik-pixels {
+  font-family: 'Rubik Pixels', sans-serif;
+  font-weight: normal;
+}
+
