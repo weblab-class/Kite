@@ -5,15 +5,15 @@ import "./newCharStats.css";
 function NewCharStats() {
   const navigate = useNavigate();
   const [stats, setStats] = useState({
-    strength: 60, // Initial placeholder values
-    constitution: 50,
-    size: 50,
-    dexterity: 80,
-    appearance: 40,
-    education: 45,
-    wisdom: 60,
-    power: 40,
-    luck: 70,
+    strength: 0,
+    constitution: 0,
+    size: 0,
+    dexterity: 0,
+    appearance: 0,
+    education: 0,
+    wisdom: 0,
+    power: 0,
+    luck: 0,
   });
 
   // Calculate total whenever stats change
