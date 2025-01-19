@@ -18,7 +18,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-const GOOGLE_CLIENT_ID = "652128607404-rkv0o9ma7cqrlf75vlums1ga44ha59d9.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = "257498817327-5t5f251gccfp98aqv3naqq985rehu0o9.apps.googleusercontent.com";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

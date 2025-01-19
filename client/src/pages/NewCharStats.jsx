@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./newCharStats.css";
+import MenuBar from "../components/MenuBar";
 
 function NewCharStats() {
   const navigate = useNavigate();
@@ -69,6 +70,7 @@ function NewCharStats() {
 
   return (
     <div className="v17_7">
+      <MenuBar />
       <div
         className="v22_23"
         onClick={handleDiceClick}
