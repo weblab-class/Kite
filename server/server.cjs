@@ -1,19 +1,27 @@
-/*
-This file should:
-| - Connect to the database (TODO: WORKSHOP 5)
-| - Sets up server middleware (i.e. addons that enable things like json parsing) (TODO: WORKSHOP 3)
-| - Hooks up all the backend routes specified in api.js (TODO: WORKSHOP 4)
-| - Sets up error handling in case something goes wrong when handling a request (TODO: WORKSHOP 3)
-| - Actually starts the webserver
-*/
 require("dotenv").config();
+
+// Use environment variables
+const PORT = process.env.PORT || 3000;
+const MONGODB_URI = process.env.MONGODB_URI;
+
+// setup mongo url
+const mongoose = require("mongoose");
+const databaseName = "Cluster0";
+
+// connect to mongodb
+mongoose
+  .connect(MONGODB_URI, {
+    dbName: databaseName,
+  })
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.log(`Error connecting to MongoDB: ${err}`));
+
 
 // libraries
 const express = require("express");
 const path = require("path");
 
 const app = express();
-const port = 3000;
 
 // allow us to make post requests
 app.use(express.json());
@@ -100,6 +108,6 @@ app.all("*", (req, res) => {
   res.status(404).send({ msg: "Route not found" });
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port: ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server running on port: ${PORT}`);
 });
