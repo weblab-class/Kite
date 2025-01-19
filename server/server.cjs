@@ -65,14 +65,32 @@ app.post("/api/new-character", (req, res) => {
   const new_character_info = req.body.player_info;
 
   // Validate the incoming data
-  if (!new_character_info || !new_character_info.stats) {
+  if (
+    !new_character_info ||
+    (!new_character_info.stats && !new_character_info.skills)
+  ) {
     return res.status(400).send({ error: "Invalid character data" });
   }
 
-  Object.assign(character_new, new_character_info);
-  characters.push(character_new); // Add the new character to the array
+  // If this is an update to an existing character
+  if (new_character_info._id) {
+    const existingCharIndex = characters.findIndex(
+      (char) => char._id === new_character_info._id
+    );
+    if (existingCharIndex !== -1) {
+      characters[existingCharIndex] = {
+        ...characters[existingCharIndex],
+        ...new_character_info,
+      };
+      return res.status(200).send(characters[existingCharIndex]);
+    }
+  }
 
-  console.log("New character added:", character_new);
+  // If this is a new character
+  Object.assign(character_new, new_character_info);
+  characters.push(character_new);
+
+  console.log("Character updated:", character_new);
   res.status(201).send(character_new);
 });
 
