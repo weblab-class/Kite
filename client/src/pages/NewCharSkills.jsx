@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./newCharSkills.css";
+import MenuBar from "../components/MenuBar";
 
 function NewCharSkills() {
   const navigate = useNavigate();
@@ -96,6 +97,7 @@ function NewCharSkills() {
 
   return (
     <div className="v17_8">
+      <MenuBar />
       <span className="v21_93">Skills</span>
       <span className="v24_90">Remaining Points: {remainingPoints}</span>
 

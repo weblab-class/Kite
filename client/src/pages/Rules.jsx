@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import MenuBar from '../components/MenuBar';
 import './rules.css';
 
 function Rules() {
@@ -7,6 +8,7 @@ function Rules() {
 
   return (
     <div className="v10_12">
+      <MenuBar />
       <span className="v13_31">Rules</span>
       <div className="v13_35">
         <span className="v13_34">

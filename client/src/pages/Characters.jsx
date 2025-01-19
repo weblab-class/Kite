@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Characters.css";
 import { useNavigate } from "react-router-dom";
 import { get } from "../utilities";
+import MenuBar from "../components/MenuBar";
 
 function Characters() {
   const [characters, setCharacters] = useState([]);
@@ -39,6 +40,7 @@ function Characters() {
 
   return (
     <div className="v13_39">
+      <MenuBar />
       <div className="v13_40">
         <div className="v13_60">
           <div className="v13_59"></div>

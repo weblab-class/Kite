@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import FormField from "../components/FormField";
 import "./newCharPlayerInfo.css";
 import { post } from "../utilities.js";
+import MenuBar from "../components/MenuBar";
 
 function NewCharPlayerInfo() {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ function NewCharPlayerInfo() {
 
   return (
     <div className="character-page">
+      <MenuBar />
       <div className="character-form">
         <FormField
           label="Character Name:"
