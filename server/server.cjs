@@ -63,10 +63,17 @@ app.get("/api/characters", (req, res) => {
 
 app.post("/api/new-character", (req, res) => {
   const new_character_info = req.body.player_info;
+
+  // Validate the incoming data
+  if (!new_character_info || !new_character_info.stats) {
+    return res.status(400).send({ error: "Invalid character data" });
+  }
+
   Object.assign(character_new, new_character_info);
-  // characters.push(new_character_info);
-  console.log(character_new);
-  res.send(new_character_info);
+  characters.push(character_new); // Add the new character to the array
+
+  console.log("New character added:", character_new);
+  res.status(201).send(character_new);
 });
 
 // anything bad happens, we log
