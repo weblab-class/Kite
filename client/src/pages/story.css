@@ -27,15 +27,21 @@ body {
 }
 
 .v73_55 {
-  width: clamp(200px, 20vw, 243px);
-  height: auto;
-  position: absolute;
-  top: 50%;
-  left: 10%;
-  transform: translateY(-50%);
+  position: fixed;
+  top: 0;
+  left: -200px;
+  width: 200px;
+  height: 100vh;
+  background: rgba(42,58,67,0.95);
+  padding: 4rem 1rem;
+  transition: left 0.3s ease;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
+}
+
+.v73_55.open {
+  left: 0;
 }
 
 .v73_51, .v73_52, .v73_53, .v73_54 {
@@ -64,6 +70,36 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.menu-toggle {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  font-size: 2rem;
+  color: rgba(159,159,159,1);
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+.menu-toggle:hover {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+/* Add hover detection area */
+.menu-area {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+  z-index: 999;
+}
+
+.menu-area:hover .menu-toggle {
+  opacity: 1;
 }
 
 /* Media queries for better mobile responsiveness */

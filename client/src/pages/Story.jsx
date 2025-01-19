@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Story.css';
 
 function Story() {
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleNavigation = (path) => {
     switch(path) {
@@ -24,11 +25,20 @@ function Story() {
       default:
         break;
     }
+    setIsMenuOpen(false);  // Close menu after navigation
   };
 
   return (
     <div className="v74_28">
-      <div className="v73_55">
+      <div className="menu-area">
+        <div 
+          className={`menu-toggle ${isMenuOpen ? 'open' : ''}`}
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          ☰
+        </div>
+      </div>
+      <div className={`v73_55 ${isMenuOpen ? 'open' : ''}`}>
         <span 
           className="v73_52" 
           onClick={() => handleNavigation('save')}
