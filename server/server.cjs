@@ -50,18 +50,17 @@ mongoose
 const app = express();
 app.use(validator.checkRoutes);
 
-// allow us to make post requests
-app.use(express.json());
-
 // set up a session, which will persist login data across requests
 app.use(
   session({
-    // TODO: add a SESSION_SECRET string in your .env file, and replace the secret with process.env.SESSION_SECRET
-    secret: "session-secret",
+    secret: process.env.SESSION_SECRET || "session-secret",
     resave: false,
     saveUninitialized: false,
   })
 );
+
+// allow us to make post requests
+app.use(express.json());
 
 // this checks if the user is logged in, and populates "req.user"
 app.use(auth.populateCurrentUser);

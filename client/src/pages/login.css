@@ -4,7 +4,9 @@
   padding: 0;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   width: 100%;
   height: 100vh;
   margin: 0;
@@ -16,7 +18,7 @@ html, body, #root {
   width: 100vw;
   height: 100vh;
   min-height: 100vh;
-  background: rgba(42,58,67,1);
+  background: rgba(42, 58, 67, 1);
   opacity: 1;
   position: fixed;
   top: 0;
@@ -28,20 +30,20 @@ html, body, #root {
 .v10_4 {
   width: 100%;
   height: 100vh;
-  background: rgba(255,255,255,0);
+  background: rgba(255, 255, 255, 0);
   opacity: 1;
   position: relative;
   overflow: hidden;
 }
 .v11_2 {
   width: 30vw;
-  color: rgba(159,159,159,1);
+  color: rgba(159, 159, 159, 1);
   position: absolute;
   top: 25vh;
   left: 50%;
   transform: translateX(-50%);
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  font-family: 'Pixelify Sans';
+  font-family: "Pixelify Sans";
   font-weight: normal;
   font-size: clamp(3rem, 8vw, 8rem);
   opacity: 1;
@@ -49,12 +51,12 @@ html, body, #root {
 }
 .v11_6 {
   width: 50vw;
-  color: rgba(91,120,138,1);
+  color: rgba(91, 120, 138, 1);
   position: absolute;
   top: 12vh;
   left: 50%;
   transform: translateX(-50%);
-  font-family: 'Pixelify Sans';
+  font-family: "Pixelify Sans";
   font-weight: normal;
   font-size: clamp(1.5rem, 2.5vw, 2.3rem);
   opacity: 1;
@@ -64,7 +66,7 @@ html, body, #root {
   width: 30vw;
   min-width: 300px;
   height: auto;
-  background: rgba(255,255,255,1);
+  background: rgba(255, 255, 255, 1);
   padding: 1.5vh 2vw;
   margin: 1vh auto;
   opacity: 1;
@@ -76,9 +78,9 @@ html, body, #root {
 }
 .v13_23 {
   width: 100%;
-  color: rgba(0,0,0,1);
+  color: rgba(0, 0, 0, 1);
   position: relative;
-  font-family: 'Pixelify Sans';
+  font-family: "Pixelify Sans";
   font-weight: normal;
   font-size: clamp(1.5rem, 2.5vw, 2.5rem);
   opacity: 1;
@@ -127,17 +129,33 @@ html, body, #root {
 
 /* Add media queries for better mobile responsiveness */
 @media screen and (max-width: 768px) {
-  .v14_11, .v11_7 {
+  .v14_11,
+  .v11_7 {
     display: none; /* Hide side images on mobile */
   }
-  
-  .v11_19, .v13_24{
+
+  .v11_19,
+  .v13_24 {
     width: 90vw;
   }
 }
 
 .rubik-pixels {
-  font-family: 'Rubik Pixels', sans-serif;
+  font-family: "Rubik Pixels", sans-serif;
   font-weight: normal;
 }
 
+.google-login-button {
+  background-color: #4285f4;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.google-login-button:hover {
+  background-color: #357abd;
+}
