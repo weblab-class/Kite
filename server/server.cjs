@@ -6,180 +6,89 @@ This file should:
 | - Sets up error handling in case something goes wrong when handling a request (TODO: WORKSHOP 3)
 | - Actually starts the webserver
 */
+
+// validator runs some basic checks to make sure you've set everything up correctly
+// this is a tool provided by staff, so you don't need to worry about it
+const validator = require("./validator.cjs");
+validator.checkSetup();
+
 require("dotenv").config();
 
-// libraries
-const express = require("express");
-const path = require("path");
+//import libraries needed for the webserver to work!
+const http = require("http");
+const express = require("express"); // backend framework for our node server.
+const session = require("express-session"); // library that stores info about each connected user
+const mongoose = require("mongoose"); // library to connect to MongoDB
+const path = require("path"); // provide utilities for working with file and directory paths
 
+const api = require("./api.cjs");
+const auth = require("./auth.cjs");
+
+// socket stuff
+const socketManager = require("./server-socket.cjs");
+
+// Server configuration below
+// TODO change connection URL after setting up your team database
+const mongoConnectionURL = process.env.MONGODB_URI;
+// TODO change database name to the name you chose
+const databaseName = "Kite";
+
+// mongoose 7 warning
+mongoose.set("strictQuery", false);
+
+// connect to mongodb
+mongoose
+  .connect(mongoConnectionURL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    dbName: databaseName,
+  })
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.log(`Error connecting to MongoDB: ${err}`));
+
+// create a new express server
 const app = express();
-const port = 3000;
+app.use(validator.checkRoutes);
 
 // allow us to make post requests
 app.use(express.json());
 
-const character1 = {
-  _id: "id1",
-  player_info: {
-    character_name: "Joe's Character",
-    age: 20,
-    job: "detective",
-    gender: "Male",
-    player_name: "Joe",
-  },
-  stats: {
-    strength: 45,
-    constitution: 60,
-    size: 65,
-    dexterity: 70,
-    appearance: 55,
-    education: 80,
-    wisdom: 65,
-    power: 50,
-    luck: 75,
-  },
-  skills: {
-    libraryUse: 50,
-    listen: 50,
-    firstAid: 50,
-    medicine: 50,
-    fighting: 50,
-    psychology: 50,
-    dodge: 50,
-    spotHidden: 50,
-    stealth: 50,
-    intimidate: 50,
-  },
-};
+// set up a session, which will persist login data across requests
+app.use(
+  session({
+    // TODO: add a SESSION_SECRET string in your .env file, and replace the secret with process.env.SESSION_SECRET
+    secret: "session-secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
-const character2 = {
-  _id: "id2",
-  player_info: {
-    character_name: "Suzie",
-    age: 20,
-    job: "detective",
-    gender: "Female",
-    player_name: "Susan",
-  },
-  stats: {
-    strength: 55,
-    constitution: 65,
-    size: 70,
-    dexterity: 75,
-    appearance: 60,
-    education: 85,
-    wisdom: 70,
-    power: 55,
-    luck: 80,
-  },
-  skills: {
-    libraryUse: 50,
-    listen: 50,
-    firstAid: 50,
-    medicine: 50,
-    fighting: 50,
-    psychology: 50,
-    dodge: 50,
-    spotHidden: 50,
-    stealth: 50,
-    intimidate: 50,
-  },
-};
+// this checks if the user is logged in, and populates "req.user"
+app.use(auth.populateCurrentUser);
 
-const character3 = {
-  _id: "id3",
-  player_info: {
-    character_name: "Alicia",
-    age: 20,
-    job: "medium",
-    gender: "Female",
-    player_name: "Alice",
-  },
-  stats: {
-    strength: 50,
-    constitution: 70,
-    size: 60,
-    dexterity: 80,
-    appearance: 65,
-    education: 75,
-    wisdom: 60,
-    power: 45,
-    luck: 70,
-  },
-  skills: {
-    libraryUse: 50,
-    listen: 50,
-    firstAid: 50,
-    medicine: 50,
-    fighting: 50,
-    psychology: 50,
-    dodge: 50,
-    spotHidden: 50,
-    stealth: 50,
-    intimidate: 50,
-  },
-};
+// connect user-defined routes
+app.use("/api", api);
 
-const characters = [character1, character2, character3];
+// load the compiled react files, which will serve /index.html and /bundle.js
+const reactPath = path.resolve(__dirname, "..", "client", "dist");
+app.use(express.static(reactPath));
 
-// Add a temporary storage for the character being created
-let characterInProgress = null;
-
-app.get("/api/characters", (req, res) => {
-  console.log("GET /api/characters request received");
-  console.log("Sending characters:", characters);
-  res.send(characters);
+// for all other routes, render index.html and let react router handle it
+app.get("*", (req, res) => {
+  res.sendFile(path.join(reactPath, "index.html"), (err) => {
+    if (err) {
+      console.log("Error sending client/dist/index.html:", err.status || 500);
+      res
+        .status(err.status || 500)
+        .send(
+          "Error sending client/dist/index.html - have you run `npm run build`?"
+        );
+    }
+  });
 });
 
-app.post("/api/new-character", (req, res) => {
-  console.log("Received request body:", req.body); // Add logging
-
-  if (!characterInProgress) {
-    console.log("Creating new character");
-    const new_character_info = req.body.new_character_info;
-    // First step: Creating new character with player info
-    characterInProgress = {
-      _id: `id${characters.length + 1}`, // Simple ID generation
-      player_info: {
-        character_name: new_character_info.characterName || "",
-        age: new_character_info.age || "",
-        job: new_character_info.job || "medium",
-        gender: new_character_info.gender || "",
-        player_name: new_character_info.playerName || "",
-      },
-    };
-  } else if (req.body.stats) {
-    // Second step: Adding stats
-    console.log("Adding stats:", req.body.stats);
-    characterInProgress.stats = req.body.stats;
-  } else if (req.body.skills) {
-    // Final step: Adding skills and pushing to characters array
-    console.log("Adding skills:", req.body.skills);
-    characterInProgress.skills = req.body.skills; // Simply assign the skills object directly
-
-    // Add the completed character to the array
-    characters.push({ ...characterInProgress });
-    // Reset the in-progress character
-    const completedCharacter = characterInProgress;
-    characterInProgress = null;
-    return res.status(201).send(completedCharacter);
-  }
-
-  res.status(200).send(characterInProgress);
-});
-
-app.get("/api/new-character", (req, res) => {
-  if (!characterInProgress) {
-    return res.status(404).send({ error: "No character in progress" });
-  }
-  res.status(200).send(characterInProgress);
-});
-
-// anything bad happens, we log
-app.all("*", (req, res) => {
-  console.log(`Route not found: ${req.method} ${req.url}`);
-  res.status(404).send({ msg: "Route not found" });
-});
+// port is not defined in your original code
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
