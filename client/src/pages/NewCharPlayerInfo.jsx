@@ -13,6 +13,7 @@ function NewCharPlayerInfo() {
     age: "",
     gender: "",
     playerName: "",
+    job: "medium",
   });
 
   const handleInputChange = (field) => (event) => {
@@ -22,8 +23,16 @@ function NewCharPlayerInfo() {
     });
   };
 
+  const handleJobChange = (e) => {
+    setSelectedJob(e.target.value);
+    setFormData({
+      ...formData,
+      job: e.target.value,
+    });
+  };
+
   const handleNext = () => {
-    post("/api/new-character", { player_info: formData });
+    post("/api/new-character", { new_character_info: formData });
     navigate("/new-character-stats");
   };
 
@@ -52,7 +61,7 @@ function NewCharPlayerInfo() {
                 name="job"
                 value="medium"
                 checked={selectedJob === "medium"}
-                onChange={(e) => setSelectedJob(e.target.value)}
+                onChange={(e) => handleJobChange(e)}
                 className="job-radio"
               />
               <span className="job-label-text">Medium</span>
@@ -63,7 +72,7 @@ function NewCharPlayerInfo() {
                 name="job"
                 value="detective"
                 checked={selectedJob === "detective"}
-                onChange={(e) => setSelectedJob(e.target.value)}
+                onChange={(e) => handleJobChange(e)}
                 className="job-radio"
               />
               <span className="job-label-text">Detective</span>

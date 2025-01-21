@@ -2,34 +2,33 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./newCharSkills.css";
 import MenuBar from "../components/MenuBar";
+import { get, post } from "../utilities.js";
 
 function NewCharSkills() {
   const navigate = useNavigate();
   const [skillPoints, setSkillPoints] = useState(0);
   const [remainingPoints, setRemainingPoints] = useState(0);
-  const [skills, setSkills] = useState([
-    { id: "libraryUse", name: "Library Use", value: 0, baseValue: 0 },
-    { id: "listen", name: "Listen", value: 0, baseValue: 0 },
-    { id: "firstAid", name: "First Aid", value: 0, baseValue: 0 },
-    { id: "medicine", name: "Medicine", value: 0, baseValue: 0 },
-    { id: "fighting", name: "Fighting", value: 0, baseValue: 0 },
-    { id: "psychology", name: "Psychology", value: 0, baseValue: 0 },
-    { id: "dodge", name: "Dodge", value: 0, baseValue: 0 },
-    { id: "spotHidden", name: "Spot Hidden", value: 0, baseValue: 0 },
-    { id: "stealth", name: "Stealth", value: 0, baseValue: 0 },
-    { id: "intimidate", name: "Intimidate", value: 0, baseValue: 0 },
-  ]);
+  const [skills, setSkills] = useState({
+    libraryUse: 0,
+    listen: 0,
+    firstAid: 0,
+    medicine: 0,
+    fighting: 0,
+    psychology: 0,
+    dodge: 0,
+    spotHidden: 0,
+    stealth: 0,
+    intimidate: 0,
+  });
 
   useEffect(() => {
-    // Fetch the latest character data from the backend
+    // Fetch the in-progress character data from the backend
     const fetchCharacterData = async () => {
       try {
-        const response = await fetch("/api/characters");
-        const characters = await response.json();
-        const latestCharacter = characters[characters.length - 1];
+        const character = await get("/api/new-character");
 
-        if (latestCharacter && latestCharacter.stats) {
-          const totalPoints = latestCharacter.stats.education * 4;
+        if (character && character.stats) {
+          const totalPoints = character.stats.education * 4;
           setSkillPoints(totalPoints);
           setRemainingPoints(totalPoints);
         }
@@ -41,53 +40,31 @@ function NewCharSkills() {
     fetchCharacterData();
   }, []);
 
-  const handleSkillChange = (skillId, newValue) => {
-    const updatedSkills = skills.map((skill) => {
-      if (skill.id === skillId) {
-        // Ensure the new value isn't less than the base value
-        const validatedValue = Math.max(skill.baseValue, newValue);
-        return { ...skill, value: validatedValue };
-      }
-      return skill;
-    });
-
-    // Calculate total points used
-    const pointsUsed = updatedSkills.reduce(
-      (total, skill) => total + (skill.value - skill.baseValue),
+  const handleSkillChange = (skillName, newValue) => {
+    // Calculate total points used with the new value
+    const pointsUsed = Object.entries(skills).reduce(
+      (total, [key, value]) => total + (key === skillName ? newValue : value),
       0
     );
 
     // Only update if we haven't exceeded our total points
     if (pointsUsed <= skillPoints) {
-      setSkills(updatedSkills);
+      setSkills({
+        ...skills,
+        [skillName]: newValue,
+      });
       setRemainingPoints(skillPoints - pointsUsed);
     }
   };
 
   const handleNext = async () => {
     try {
-      // Get the latest character
-      const response = await fetch("/api/characters");
-      const characters = await response.json();
-      const latestCharacter = characters[characters.length - 1];
-
       // Update the character with skills
-      const updateResponse = await fetch("/api/new-character", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      await post("/api/new-character", {
+        new_character_info: {
+          skills: skills,
         },
-        body: JSON.stringify({
-          player_info: {
-            ...latestCharacter,
-            skills: skills,
-          },
-        }),
       });
-
-      if (!updateResponse.ok) {
-        throw new Error("Failed to save skills");
-      }
 
       navigate("/story");
     } catch (error) {
@@ -104,38 +81,46 @@ function NewCharSkills() {
       <div className="skills-container">
         {/* First Row */}
         <div className="skills-row">
-          {skills.slice(0, 5).map((skill) => (
-            <div key={skill.id} className="skill-item">
-              <span className="skill-name">{skill.name}</span>
-              <input
-                type="number"
-                value={skill.value}
-                min={skill.baseValue}
-                max={99}
-                onChange={(e) =>
-                  handleSkillChange(skill.id, parseInt(e.target.value))
-                }
-              />
-            </div>
-          ))}
+          {Object.entries(skills)
+            .slice(0, 5)
+            .map(([skillName, value]) => (
+              <div key={skillName} className="skill-item">
+                <span className="skill-name">
+                  {skillName.replace(/([A-Z])/g, " $1").trim()}
+                </span>
+                <input
+                  type="number"
+                  value={value}
+                  min={0}
+                  max={99}
+                  onChange={(e) =>
+                    handleSkillChange(skillName, parseInt(e.target.value))
+                  }
+                />
+              </div>
+            ))}
         </div>
 
         {/* Second Row */}
         <div className="skills-row">
-          {skills.slice(5).map((skill) => (
-            <div key={skill.id} className="skill-item">
-              <span className="skill-name">{skill.name}</span>
-              <input
-                type="number"
-                value={skill.value}
-                min={skill.baseValue}
-                max={99}
-                onChange={(e) =>
-                  handleSkillChange(skill.id, parseInt(e.target.value))
-                }
-              />
-            </div>
-          ))}
+          {Object.entries(skills)
+            .slice(5)
+            .map(([skillName, value]) => (
+              <div key={skillName} className="skill-item">
+                <span className="skill-name">
+                  {skillName.replace(/([A-Z])/g, " $1").trim()}
+                </span>
+                <input
+                  type="number"
+                  value={value}
+                  min={0}
+                  max={99}
+                  onChange={(e) =>
+                    handleSkillChange(skillName, parseInt(e.target.value))
+                  }
+                />
+              </div>
+            ))}
         </div>
       </div>
 

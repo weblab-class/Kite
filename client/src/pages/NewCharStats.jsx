@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./newCharStats.css";
 import MenuBar from "../components/MenuBar";
+import { post } from "../utilities.js";
 
 function NewCharStats() {
   const navigate = useNavigate();
@@ -38,34 +39,14 @@ function NewCharStats() {
     });
   };
 
-  const handleNext = async () => {
-    try {
-      const response = await fetch("/api/new-character", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          player_info: {
-            stats: stats,
-            // You might want to add other character info here
-            // like character_name and player_name
-            character_name: "", // You'll need to collect this from the user
-            player_name: "", // You'll need to collect this from the user
-          },
-        }),
+  const handleNext = () => {
+    post("/api/new-character", { new_character_info: { stats: stats } })
+      .then(() => {
+        navigate("/new-character-skills");
+      })
+      .catch((error) => {
+        console.error("Error saving stats:", error);
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to save character stats");
-      }
-
-      // If successful, navigate to the next page
-      navigate("/new-character-skills");
-    } catch (error) {
-      console.error("Error saving character stats:", error);
-      // You might want to show an error message to the user here
-    }
   };
 
   return (
