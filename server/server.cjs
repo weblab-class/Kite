@@ -27,6 +27,8 @@ const auth = require("./auth.cjs");
 // socket stuff
 const socketManager = require("./server-socket.cjs");
 
+const { generateResponse } = require('./services/openai.js');
+
 // Server configuration below
 // TODO change connection URL after setting up your team database
 const mongoConnectionURL = process.env.MONGODB_URI;
@@ -85,6 +87,16 @@ app.get("*", (req, res) => {
         );
     }
   });
+});
+
+app.post("/api/chat", async (req, res) => {
+    try {
+        const { prompt } = req.body;
+        const response = await generateResponse(prompt);
+        res.json({ response });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to generate response" });
+    }
 });
 
 // port is not defined in your original code
