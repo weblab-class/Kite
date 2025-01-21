@@ -133,10 +133,10 @@ app.get("/api/characters", (req, res) => {
 
 app.post("/api/new-character", (req, res) => {
   console.log("Received request body:", req.body); // Add logging
-  const new_character_info = req.body.new_character_info;
 
-  // Handle the character creation flow
   if (!characterInProgress) {
+    console.log("Creating new character");
+    const new_character_info = req.body.new_character_info;
     // First step: Creating new character with player info
     characterInProgress = {
       _id: `id${characters.length + 1}`, // Simple ID generation
@@ -148,15 +148,14 @@ app.post("/api/new-character", (req, res) => {
         player_name: new_character_info.playerName || "",
       },
     };
-  } else if (new_character_info.stats) {
+  } else if (req.body.stats) {
     // Second step: Adding stats
-    characterInProgress.stats = new_character_info.stats;
-  } else if (new_character_info.skills) {
+    console.log("Adding stats:", req.body.stats);
+    characterInProgress.stats = req.body.stats;
+  } else if (req.body.skills) {
     // Final step: Adding skills and pushing to characters array
-    characterInProgress.skills = {};
-    new_character_info.skills.forEach((skill) => {
-      characterInProgress.skills[skill.id] = skill.value;
-    });
+    console.log("Adding skills:", req.body.skills);
+    characterInProgress.skills = req.body.skills; // Simply assign the skills object directly
 
     // Add the completed character to the array
     characters.push({ ...characterInProgress });

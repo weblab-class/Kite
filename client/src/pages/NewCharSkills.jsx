@@ -60,12 +60,7 @@ function NewCharSkills() {
   const handleNext = async () => {
     try {
       // Update the character with skills
-      await post("/api/new-character", {
-        new_character_info: {
-          skills: skills,
-        },
-      });
-
+      post("/api/new-character", { skills: skills });
       navigate("/story");
     } catch (error) {
       console.error("Error saving skills:", error);

@@ -40,7 +40,7 @@ function NewCharStats() {
   };
 
   const handleNext = () => {
-    post("/api/new-character", { new_character_info: { stats: stats } })
+    post("/api/new-character", { stats: stats })
       .then(() => {
         navigate("/new-character-skills");
       })
