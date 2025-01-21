@@ -30,12 +30,13 @@ function Characters() {
   if (hasCharacters) {
     charactersList = characters.map((character) => (
       <span key={`Character_${character._id}`} className="v13_51">
-        {character.character_name}
+        {character.player_info.character_name}
       </span>
     ));
   } else {
-    charactersList = <span className="find_character">
-      No characters found</span>;
+    charactersList = (
+      <span className="find_character">No characters found</span>
+    );
   }
 
   return (

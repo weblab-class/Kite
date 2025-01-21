@@ -20,40 +20,110 @@ app.use(express.json());
 
 const character1 = {
   _id: "id1",
-  player_name: "Joe",
-  character_name: "Joe's Character",
+  player_info: {
+    character_name: "Joe's Character",
+    age: 20,
+    job: "detective",
+    gender: "Male",
+    player_name: "Joe",
+  },
   stats: {
-    health: 100,
-    attack: 10,
-    defense: 5,
+    strength: 45,
+    constitution: 60,
+    size: 65,
+    dexterity: 70,
+    appearance: 55,
+    education: 80,
+    wisdom: 65,
+    power: 50,
+    luck: 75,
+  },
+  skills: {
+    libraryUse: 50,
+    listen: 50,
+    firstAid: 50,
+    medicine: 50,
+    fighting: 50,
+    psychology: 50,
+    dodge: 50,
+    spotHidden: 50,
+    stealth: 50,
+    intimidate: 50,
   },
 };
 
 const character2 = {
   _id: "id2",
-  player_name: "Susan",
-  character_name: "Suzie",
+  player_info: {
+    character_name: "Suzie",
+    age: 20,
+    job: "detective",
+    gender: "Female",
+    player_name: "Susan",
+  },
   stats: {
-    health: 100,
-    attack: 10,
-    defense: 5,
+    strength: 55,
+    constitution: 65,
+    size: 70,
+    dexterity: 75,
+    appearance: 60,
+    education: 85,
+    wisdom: 70,
+    power: 55,
+    luck: 80,
+  },
+  skills: {
+    libraryUse: 50,
+    listen: 50,
+    firstAid: 50,
+    medicine: 50,
+    fighting: 50,
+    psychology: 50,
+    dodge: 50,
+    spotHidden: 50,
+    stealth: 50,
+    intimidate: 50,
   },
 };
 
 const character3 = {
   _id: "id3",
-  player_name: "Alice",
-  character_name: "Alicia",
+  player_info: {
+    character_name: "Alicia",
+    age: 20,
+    job: "medium",
+    gender: "Female",
+    player_name: "Alice",
+  },
   stats: {
-    health: 100,
-    attack: 10,
-    defense: 5,
+    strength: 50,
+    constitution: 70,
+    size: 60,
+    dexterity: 80,
+    appearance: 65,
+    education: 75,
+    wisdom: 60,
+    power: 45,
+    luck: 70,
+  },
+  skills: {
+    libraryUse: 50,
+    listen: 50,
+    firstAid: 50,
+    medicine: 50,
+    fighting: 50,
+    psychology: 50,
+    dodge: 50,
+    spotHidden: 50,
+    stealth: 50,
+    intimidate: 50,
   },
 };
 
 const characters = [character1, character2, character3];
 
-const character_new = {};
+// Add a temporary storage for the character being created
+let characterInProgress = null;
 
 app.get("/api/characters", (req, res) => {
   console.log("GET /api/characters request received");
@@ -62,36 +132,47 @@ app.get("/api/characters", (req, res) => {
 });
 
 app.post("/api/new-character", (req, res) => {
-  const new_character_info = req.body.player_info;
+  console.log("Received request body:", req.body); // Add logging
 
-  // Validate the incoming data
-  if (
-    !new_character_info ||
-    (!new_character_info.stats && !new_character_info.skills)
-  ) {
-    return res.status(400).send({ error: "Invalid character data" });
+  if (!characterInProgress) {
+    console.log("Creating new character");
+    const new_character_info = req.body.new_character_info;
+    // First step: Creating new character with player info
+    characterInProgress = {
+      _id: `id${characters.length + 1}`, // Simple ID generation
+      player_info: {
+        character_name: new_character_info.characterName || "",
+        age: new_character_info.age || "",
+        job: new_character_info.job || "medium",
+        gender: new_character_info.gender || "",
+        player_name: new_character_info.playerName || "",
+      },
+    };
+  } else if (req.body.stats) {
+    // Second step: Adding stats
+    console.log("Adding stats:", req.body.stats);
+    characterInProgress.stats = req.body.stats;
+  } else if (req.body.skills) {
+    // Final step: Adding skills and pushing to characters array
+    console.log("Adding skills:", req.body.skills);
+    characterInProgress.skills = req.body.skills; // Simply assign the skills object directly
+
+    // Add the completed character to the array
+    characters.push({ ...characterInProgress });
+    // Reset the in-progress character
+    const completedCharacter = characterInProgress;
+    characterInProgress = null;
+    return res.status(201).send(completedCharacter);
   }
 
-  // If this is an update to an existing character
-  if (new_character_info._id) {
-    const existingCharIndex = characters.findIndex(
-      (char) => char._id === new_character_info._id
-    );
-    if (existingCharIndex !== -1) {
-      characters[existingCharIndex] = {
-        ...characters[existingCharIndex],
-        ...new_character_info,
-      };
-      return res.status(200).send(characters[existingCharIndex]);
-    }
+  res.status(200).send(characterInProgress);
+});
+
+app.get("/api/new-character", (req, res) => {
+  if (!characterInProgress) {
+    return res.status(404).send({ error: "No character in progress" });
   }
-
-  // If this is a new character
-  Object.assign(character_new, new_character_info);
-  characters.push(character_new);
-
-  console.log("Character updated:", character_new);
-  res.status(201).send(character_new);
+  res.status(200).send(characterInProgress);
 });
 
 // anything bad happens, we log
