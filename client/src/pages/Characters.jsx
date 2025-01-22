@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Characters.css";
+import "./characters.css";
 import { useNavigate } from "react-router-dom";
 import { get, post } from "../utilities";
 import MenuBar from "../components/MenuBar";
