@@ -23,7 +23,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
 
 .v73_55 {
@@ -241,32 +240,4 @@ body {
   50% {
     transform: translateY(-5px);
   }
-}
-
-.options-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 10px;
-  border-top: 1px solid rgba(159,159,159,0.5);
-}
-
-.option-button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  background: rgba(159,159,159,0.3);
-  color: white;
-  cursor: pointer;
-  font-family: 'Pixelify Sans', sans-serif;
-  transition: background 0.3s;
-}
-
-.option-button:hover:not(:disabled) {
-  background: rgba(159,159,159,0.5);
-}
-
-.option-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
 }

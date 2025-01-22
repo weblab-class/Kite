@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { post } from "../utilities";
 import MenuBar from "../components/MenuBar";
+import ChatBox from "../components/ChatBox";
 import './Story.css';
 
 function Story() {
@@ -76,38 +77,12 @@ function Story() {
   return (
     <div className="v74_28">
       <MenuBar isOpen={isMenuOpen} toggleMenu={setIsMenuOpen} />
-      
-      <div className="chatbox">
-        <div className="chat-messages">
-          {messages.map((message, index) => (
-            <div 
-              key={index} 
-              className={`message ${message.role}`}
-            >
-              {message.content}
-            </div>
-          ))}
-          {isLoading && (
-            <div className="message system">
-              <div className="loading-dots">
-                <span>.</span><span>.</span><span>.</span>
-              </div>
-            </div>
-          )}
-        </div>
-        <div className="options-container">
-          {options.map((option, index) => (
-            <button 
-              key={index} 
-              className="option-button"
-              onClick={() => handleOptionSelect(option)}
-              disabled={isLoading}
-            >
-              {option}
-            </button>
-          ))}
-        </div>
-      </div>
+      <ChatBox 
+        messages={messages} 
+        options={options} 
+        isLoading={isLoading} 
+        handleOptionSelect={handleOptionSelect} 
+      />
     </div>
   );
 }
