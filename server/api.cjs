@@ -185,7 +185,7 @@ router.post("/chat", async (req, res) => {
       messages: [
         {
           role: "system",
-          content: "You are a storytelling AI that creates engaging narrative responses."
+          content: "You are a storytelling AI that creates engaging narrative responses.give me the start of a story in the following vibe: ‘Welcome to the city of fog in the 1920s. You are a private investigator hired to solve a mysterious murder."
         },
         ...messageHistory,
         { role: "user", content: prompt }
