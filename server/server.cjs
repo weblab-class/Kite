@@ -29,6 +29,8 @@ const auth = require("./auth.cjs");
 // socket stuff
 const socketManager = require("./server-socket.cjs");
 
+const { generateResponse } = require("./services/openai.js");
+
 // Server configuration below
 // TODO change connection URL after setting up your team database
 const mongoConnectionURL = process.env.MONGODB_URI;
@@ -79,9 +81,14 @@ app.use(
     cookie: {
       secure: false,  // Set to false for development
       sameSite: "lax",
+<<<<<<< HEAD
       maxAge: 24 * 60 * 60 * 1000
     },
     name: "sessionId"  // Added explicit session name
+=======
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+>>>>>>> openai
   })
 );
 
@@ -89,7 +96,11 @@ app.use(express.json());
 app.use(auth.populateCurrentUser);
 
 // 4. THEN check login for API routes
+<<<<<<< HEAD
 // app.use("/api", auth.ensureLoggedIn);  // This is where ensureLoggedIn is being called
+=======
+app.use("/api", auth.ensureLoggedIn); // This is where ensureLoggedIn is being called
+>>>>>>> openai
 
 // 5. API routes
 app.use("/api", api);
@@ -110,6 +121,18 @@ app.get("*", (req, res) => {
         );
     }
   });
+});
+
+// Apply authentication middleware to chat route
+app.post("/api/chat", auth.authenticateToken, async (req, res) => {
+  try {
+    const { prompt } = req.body;
+    const response = await generateResponse(prompt);
+    res.json({ response });
+  } catch (error) {
+    console.error("Chat error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 // port is not defined in your original code

@@ -1,6 +1,7 @@
 const { OAuth2Client } = require("google-auth-library");
 const User = require("./models/user.cjs");
 const socketManager = require("./server-socket.cjs");
+const jwt = require("jsonwebtoken");
 
 // create a new OAuth client used to verify google sign-in
 //    TODO: replace with your own CLIENT_ID
@@ -91,9 +92,27 @@ function ensureLoggedIn(req, res, next) {
   next();
 }
 
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ message: "No token provided" });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(401).json({ message: "Invalid or expired token" });
+    }
+    req.user = user;
+    next();
+  });
+};
+
 module.exports = {
   login,
   logout,
   populateCurrentUser,
   ensureLoggedIn,
+  authenticateToken,
 };
