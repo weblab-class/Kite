@@ -4,7 +4,8 @@ const socketManager = require("./server-socket.cjs");
 
 // create a new OAuth client used to verify google sign-in
 //    TODO: replace with your own CLIENT_ID
-const CLIENT_ID = "FILL ME IN";
+const CLIENT_ID =
+  "257498817327-5t5f251gccfp98aqv3naqq985rehu0o9.apps.googleusercontent.com";
 const client = new OAuth2Client(CLIENT_ID);
 
 // accepts a login token from the frontend, and verifies that it's legit
@@ -58,10 +59,16 @@ function populateCurrentUser(req, res, next) {
 }
 
 function ensureLoggedIn(req, res, next) {
+  console.log("ensureLoggedIn middleware called");
+  console.log("Session:", req.session);
+  console.log("User:", req.user);
+
   if (!req.user) {
+    console.log("No user found in request");
     return res.status(401).send({ err: "not logged in" });
   }
 
+  console.log("User is logged in, proceeding...");
   next();
 }
 

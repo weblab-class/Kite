@@ -20,6 +20,7 @@ const express = require("express"); // backend framework for our node server.
 const session = require("express-session"); // library that stores info about each connected user
 const mongoose = require("mongoose"); // library to connect to MongoDB
 const path = require("path"); // provide utilities for working with file and directory paths
+const MongoStore = require("connect-mongo");
 
 const api = require("./api.cjs");
 const auth = require("./auth.cjs");
@@ -52,23 +53,33 @@ mongoose
 const app = express();
 app.use(validator.checkRoutes);
 
-// allow us to make post requests
-app.use(express.json());
-
-// set up a session, which will persist login data across requests
+// 1. Session middleware first
 app.use(
   session({
-    // TODO: add a SESSION_SECRET string in your .env file, and replace the secret with process.env.SESSION_SECRET
     secret: "session-secret",
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+    }),
+    cookie: {
+      secure: false,
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000
+    }
   })
 );
 
-// this checks if the user is logged in, and populates "req.user"
+// 2. Body parsing middleware
+app.use(express.json());
+
+// 3. Populate user BEFORE checking login
 app.use(auth.populateCurrentUser);
 
-// connect user-defined routes
+// 4. THEN check login for API routes
+app.use("/api", auth.ensureLoggedIn);  // This is where ensureLoggedIn is being called
+
+// 5. API routes
 app.use("/api", api);
 
 // load the compiled react files, which will serve /index.html and /bundle.js

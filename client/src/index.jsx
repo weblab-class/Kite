@@ -10,15 +10,12 @@ import NewCharPlayerInfo from "./pages/NewCharPlayerInfo";
 import NewCharStats from "./pages/NewCharStats";
 import NewCharSkills from "./pages/NewCharSkills";
 import Story from "./pages/Story";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
   RouterProvider,
 } from "react-router-dom";
-
-const GOOGLE_CLIENT_ID = "257498817327-5t5f251gccfp98aqv3naqq985rehu0o9.apps.googleusercontent.com";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,14 +35,8 @@ const router = createBrowserRouter(
   )
 );
 
-// ReactDOM.createRoot(document.getElementById("root")).render(
-//   <React.StrictMode>
-//     <RouterProvider router={router} />
-//   </React.StrictMode>
-// );
-
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+  <React.StrictMode>
     <RouterProvider router={router} />
-  </GoogleOAuthProvider>
+  </React.StrictMode>
 );

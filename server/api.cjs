@@ -11,6 +11,7 @@ const express = require("express");
 
 // import models so we can interact with the database
 const User = require("./models/user.cjs");
+const Character = require("./models/character.cjs");
 
 // import authentication library
 const auth = require("./auth.cjs");
@@ -47,6 +48,7 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 const character1 = {
   _id: "id1",
+  googleid: "test_google_id_1",
   player_info: {
     character_name: "Joe's Character",
     age: 20,
@@ -81,6 +83,7 @@ const character1 = {
 
 const character2 = {
   _id: "id2",
+  googleid: "test_google_id_2",
   player_info: {
     character_name: "Suzie",
     age: 20,
@@ -115,6 +118,7 @@ const character2 = {
 
 const character3 = {
   _id: "id3",
+  googleid: "test_google_id_3",
   player_info: {
     character_name: "Alicia",
     age: 20,
@@ -152,21 +156,37 @@ const characters = [character1, character2, character3];
 // Add a temporary storage for the character being created
 let characterInProgress = null;
 
-router.get("/characters", (req, res) => {
+router.get("/characters", auth.ensureLoggedIn, (req, res) => {
   console.log("GET /characters request received");
-  console.log("Sending characters:", characters);
-  res.send(characters);
+
+  Character.find({ googleid: req.user.googleid })
+    .then((characters) => {
+      console.log("Sending characters:", characters);
+      res.send(characters);
+    })
+    .catch((err) => {
+      console.log("Error getting characters:", err);
+      res.status(500).send({ error: "Error getting characters" });
+    });
 });
 
-router.post("/new-character", (req, res) => {
-  console.log("Received request body:", req.body); // Add logging
+router.post("/new-character", auth.ensureLoggedIn, (req, res) => {
+  console.log("Received request body:", req.body);
+  console.log("User:", req.user);
+
+  // Check if user is logged in
+  if (!req.user) {
+    return res
+      .status(401)
+      .send({ error: "Must be logged in to create a character" });
+  }
 
   if (!characterInProgress) {
     console.log("Creating new character");
     const new_character_info = req.body.new_character_info;
     // First step: Creating new character with player info
-    characterInProgress = {
-      _id: `id${characters.length + 1}`, // Simple ID generation
+    characterInProgress = new Character({
+      googleid: req.user.googleid,
       player_info: {
         character_name: new_character_info.characterName || "",
         age: new_character_info.age || "",
@@ -174,28 +194,34 @@ router.post("/new-character", (req, res) => {
         gender: new_character_info.gender || "",
         player_name: new_character_info.playerName || "",
       },
-    };
+    });
   } else if (req.body.stats) {
     // Second step: Adding stats
     console.log("Adding stats:", req.body.stats);
     characterInProgress.stats = req.body.stats;
   } else if (req.body.skills) {
-    // Final step: Adding skills and pushing to characters array
+    // Final step: Adding skills and saving to database
     console.log("Adding skills:", req.body.skills);
-    characterInProgress.skills = req.body.skills; // Simply assign the skills object directly
+    characterInProgress.skills = req.body.skills;
 
-    // Add the completed character to the array
-    characters.push({ ...characterInProgress });
-    // Reset the in-progress character
-    const completedCharacter = characterInProgress;
-    characterInProgress = null;
-    return res.status(201).send(completedCharacter);
+    // Save the character to MongoDB
+    return characterInProgress
+      .save()
+      .then((savedCharacter) => {
+        const completedCharacter = savedCharacter;
+        characterInProgress = null;
+        return res.status(201).send(completedCharacter);
+      })
+      .catch((err) => {
+        console.log("Error saving character:", err);
+        return res.status(500).send({ error: "Error saving character" });
+      });
   }
 
   res.status(200).send(characterInProgress);
 });
 
-router.get("/new-character", (req, res) => {
+router.get("/new-character", auth.ensureLoggedIn, (req, res) => {
   if (!characterInProgress) {
     return res.status(404).send({ error: "No character in progress" });
   }
