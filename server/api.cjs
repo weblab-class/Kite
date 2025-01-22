@@ -173,19 +173,59 @@ router.get("/current-character", auth.ensureLoggedIn, (req, res) => {
     });
 });
 
-// Modified chat endpoint to use GPT-4o
+// Modify the chat endpoint to remove auth.ensureLoggedIn
 router.post("/chat", async (req, res) => {
   try {
-    const { prompt } = req.body;
+    const { prompt, messageHistory } = req.body;
     console.log("Received chat request with prompt:", prompt);
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o", // Changed to GPT-4o
-      messages: [{ role: "user", content: prompt }],
+    // First AI agent - Chat Response
+    const chatCompletion = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          role: "system",
+          content: "You are a storytelling AI that creates engaging narrative responses."
+        },
+        ...messageHistory,
+        { role: "user", content: prompt }
+      ],
     });
 
-    console.log("OpenAI response received");
-    res.json({ response: completion.choices[0].message.content });
+    const aiResponse = chatCompletion.choices[0].message.content;
+
+    // Second AI agent - Options Generation
+    const optionsPrompt = `Based on this conversation history and the last AI response, generate 4 distinct and interesting options for what the user could do next. Each option should be a complete sentence starting with an action verb.
+
+    Conversation history:
+    ${messageHistory.map(m => `${m.role}: ${m.content}`).join('\n')}
+    AI: ${aiResponse}
+
+    Generate 4 options:`;
+
+    const optionsCompletion = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          role: "system",
+          content: "You are an AI that generates contextual options for interactive storytelling. Generate clear, distinct choices."
+        },
+        {
+          role: "user",
+          content: optionsPrompt
+        }
+      ],
+    });
+
+    const optionsText = optionsCompletion.choices[0].message.content;
+    const options = optionsText.split('\n')
+      .filter(line => line.trim())
+      .slice(0, 4);
+
+    res.json({ 
+      response: aiResponse,
+      options: options
+    });
   } catch (error) {
     console.error("Chat error:", error);
     res.status(500).json({ message: "Error processing chat request" });

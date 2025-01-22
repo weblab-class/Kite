@@ -15,14 +15,13 @@ function Story() {
       setIsLoading(true);
       try {
         const response = await post("/api/chat", {
-          prompt: "Start the conversation"
+          prompt: "Start the conversation",
+          messageHistory: []
         });
 
         const aiMessage = { role: 'assistant', content: response.response };
         setMessages([aiMessage]);
-
-        const newOptions = await generateOptions(response.response);
-        setOptions(newOptions);
+        setOptions(response.options);
       } catch (error) {
         console.error("Chat error:", error);
         setMessages([{ 
@@ -44,14 +43,13 @@ function Story() {
 
     try {
       const response = await post("/api/chat", {
-        prompt: option
+        prompt: option,
+        messageHistory: messages
       });
 
       const aiMessage = { role: 'assistant', content: response.response };
       setMessages(prev => [...prev, aiMessage]);
-
-      const newOptions = await generateOptions(response.response);
-      setOptions(newOptions);
+      setOptions(response.options);
     } catch (error) {
       console.error("Chat error:", error);
       setMessages(prev => [...prev, { 
@@ -61,17 +59,6 @@ function Story() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const generateOptions = async (lastAiMessage) => {
-    // Simulate AI generating options based on the last AI message
-    // In a real application, this could involve more complex logic or an API call
-    return [
-      `Option 1 based on: ${lastAiMessage.slice(0, 10)}...`,
-      `Option 2 based on: ${lastAiMessage.slice(0, 10)}...`,
-      `Option 3 based on: ${lastAiMessage.slice(0, 10)}...`,
-      `Option 4 based on: ${lastAiMessage.slice(0, 10)}...`
-    ];
   };
 
   return (
