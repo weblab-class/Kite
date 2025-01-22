@@ -20,7 +20,10 @@ function Characters() {
       .then((res) => {
         console.log("Selected character:", res.currentCharacterId);
         setSelectedCharacterId(characterId);
-        navigate("/story");
+        return get(`/api/character/${characterId}/history`);
+      })
+      .then((chatHistory) => {
+        navigate("/story", { state: { chatHistory } });
       })
       .catch((err) => {
         console.log("Error selecting character:", err);

@@ -173,24 +173,142 @@ router.get("/current-character", auth.ensureLoggedIn, (req, res) => {
     });
 });
 
-// Modified chat endpoint to use GPT-4o
-router.post("/chat", async (req, res) => {
+// Modify the chat endpoint to remove auth.ensureLoggedIn
+router.post("/chat", auth.ensureLoggedIn, async (req, res) => {
   try {
-    const { prompt } = req.body;
-    console.log("Received chat request with prompt:", prompt);
+    const { prompt, messageHistory } = req.body;
+    console.log("==== Chat Request Debug ====");
+    console.log("Prompt:", prompt);
+    console.log("Message history length:", messageHistory?.length || 0);
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o", // Changed to GPT-4o
-      messages: [{ role: "user", content: prompt }],
+    // Format messages for OpenAI
+    const formattedMessages = [
+      {
+        role: "system",
+        content:
+          "You are a storytelling AI that creates engaging narrative responses. You are continuing a detective story set in a foggy city in the 1920s. Maintain consistency with the previous conversation and add new dramatic elements to keep the story engaging.",
+      },
+      ...(messageHistory || []),
+      { role: "user", content: prompt },
+    ];
+
+    console.log("Sending request to OpenAI...");
+    const chatCompletion = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: formattedMessages,
+      temperature: 0.7,
+      max_tokens: 500,
     });
 
-    console.log("OpenAI response received");
-    res.json({ response: completion.choices[0].message.content });
+    const aiResponse = chatCompletion.choices[0].message.content;
+    console.log("Received response from OpenAI");
+
+    // Create updated message history
+    const updatedMessageHistory = [
+      ...(messageHistory || []),
+      { role: "user", content: prompt },
+      { role: "assistant", content: aiResponse },
+    ];
+
+    // Second AI agent - Options Generation
+    const optionsPrompt = `Based on this story, generate 4 distinct and interesting options for what the user could do next. Each option should be a complete sentence starting with an action verb.
+
+    Story so far:
+    ${updatedMessageHistory.map((m) => `${m.role}: ${m.content}`).join("\n")}
+    AI: ${aiResponse}
+
+    Generate 4 options:`;
+
+    const optionsCompletion = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an AI that generates contextual options for interactive storytelling. Generate clear, distinct choices that would make sense for a detective in a noir mystery.",
+        },
+        {
+          role: "user",
+          content: optionsPrompt,
+        },
+      ],
+    });
+
+    const optionsText = optionsCompletion.choices[0].message.content;
+    const options = optionsText
+      .split("\n")
+      .filter((line) => line.trim())
+      .slice(0, 4)
+      .map((option) => option.replace(/^\d+\.\s*/, "")); // Remove numbering if present
+
+    // Save the updated message history to the database
+    if (currentCharacterId) {
+      try {
+        await Character.findOneAndUpdate(
+          { _id: currentCharacterId },
+          { $set: { messageHistory: updatedMessageHistory } }
+        ).exec();
+      } catch (dbError) {
+        console.error("Error saving to database:", dbError);
+      }
+    }
+
+    // Send the response to the client
+    res.json({
+      response: aiResponse,
+      options: options,
+    });
   } catch (error) {
     console.error("Chat error:", error);
-    res.status(500).json({ message: "Error processing chat request" });
+    res.status(500).json({
+      message: "Error processing chat request",
+      error: error.message,
+    });
   }
 });
+
+// Endpoint to save message history for the current character
+router.post("/save-message-history", auth.ensureLoggedIn, (req, res) => {
+  if (!currentCharacterId) {
+    return res.status(404).send({ error: "No character currently selected" });
+  }
+
+  Character.findOneAndUpdate(
+    { _id: currentCharacterId, googleid: req.user.googleid },
+    { $set: { messageHistory: messageHistory } },
+    { new: true }
+  )
+    .then((updatedCharacter) => {
+      if (!updatedCharacter) {
+        return res.status(404).send({ error: "Character not found" });
+      }
+      res.status(200).send(updatedCharacter);
+    })
+    .catch((err) => {
+      console.log("Error saving message history:", err);
+      res.status(500).send({ error: "Error saving message history" });
+    });
+});
+
+router.get(
+  "/character/:characterId/history",
+  auth.ensureLoggedIn,
+  (req, res) => {
+    const { characterId } = req.params;
+
+    Character.findOne({ _id: characterId, googleid: req.user.googleid })
+      .then((character) => {
+        if (!character) {
+          return res.status(404).send({ error: "Character not found" });
+        }
+        res.status(200).send(character.messageHistory);
+      })
+      .catch((err) => {
+        console.log("Error fetching character history:", err);
+        res.status(500).send({ error: "Error fetching character history" });
+      });
+  }
+);
 
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
