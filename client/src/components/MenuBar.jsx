@@ -9,13 +9,13 @@ function MenuBar() {
 
   const handleNavigation = (path) => {
     switch (path) {
-      case "save":
-        console.log("Save game");
-        saveMessageHistory();
-        break;
-      case "load":
-        console.log("Load game");
-        break;
+      // case "save":
+      //   console.log("Save game");
+      //   saveMessageHistory();
+      //   break;
+      // case "load":
+      //   console.log("Load game");
+      //   break;
       case "rules":
         navigate("/rules");
         break;
@@ -51,12 +51,12 @@ function MenuBar() {
         </div>
       </div>
       <div className={`menu-sidebar ${isMenuOpen ? "open" : ""}`}>
-        <span className="menu-item" onClick={() => handleNavigation("save")}>
+        {/* <span className="menu-item" onClick={() => handleNavigation("save")}>
           {`> Save`}
         </span>
         <span className="menu-item" onClick={() => handleNavigation("load")}>
           {`> Load`}
-        </span>
+        </span> */}
         <span className="menu-item" onClick={() => handleNavigation("rules")}>
           {`> Rules`}
         </span>
