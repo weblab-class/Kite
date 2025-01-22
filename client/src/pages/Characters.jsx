@@ -1,16 +1,30 @@
 import React, { useState, useEffect } from "react";
 import "./Characters.css";
 import { useNavigate } from "react-router-dom";
-import { get } from "../utilities";
+import { get, post } from "../utilities";
 import MenuBar from "../components/MenuBar";
 
 function Characters() {
   const [characters, setCharacters] = useState([]);
+  const [selectedCharacterId, setSelectedCharacterId] = useState(null);
 
   const navigate = useNavigate();
 
   const handleCreateNewCharacterClick = () => {
     navigate("/new-character-player-info");
+  };
+
+  const handleCharacterSelect = (characterId) => {
+    console.log("Selected character:", characterId);
+    post("/api/set-current-character", { characterId: characterId })
+      .then((res) => {
+        console.log("Selected character:", res.currentCharacterId);
+        setSelectedCharacterId(characterId);
+        navigate("/story");
+      })
+      .catch((err) => {
+        console.log("Error selecting character:", err);
+      });
   };
 
   useEffect(() => {
@@ -29,7 +43,13 @@ function Characters() {
   const hasCharacters = characters.length !== 0;
   if (hasCharacters) {
     charactersList = characters.map((character) => (
-      <span key={`Character_${character._id}`} className="v13_51">
+      <span
+        key={`Character_${character._id}`}
+        className={`existing-characters ${
+          character._id === selectedCharacterId ? "selected" : ""
+        }`}
+        onClick={() => handleCharacterSelect(character._id)}
+      >
         {character.player_info.character_name}
       </span>
     ));
