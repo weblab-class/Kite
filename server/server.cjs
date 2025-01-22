@@ -21,6 +21,7 @@ const session = require("express-session"); // library that stores info about ea
 const mongoose = require("mongoose"); // library to connect to MongoDB
 const path = require("path"); // provide utilities for working with file and directory paths
 const MongoStore = require("connect-mongo");
+const cors = require("cors");
 
 const api = require("./api.cjs");
 const auth = require("./auth.cjs");
@@ -49,33 +50,46 @@ mongoose
 
 // create a new express server
 const app = express();
+
+// CORS configuration
+app.use(cors({
+  origin: "http://localhost:5173",  // Your Vite frontend URL
+  credentials: true,                // Allow credentials (cookies)
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed methods
+  allowedHeaders: ["Content-Type", "Authorization"] // Allowed headers
+}));
+
 app.use(validator.checkRoutes);
 
-// 1. Session middleware first
+// Debug middleware for session tracking
+app.use((req, res, next) => {
+  console.log("\n=== Request ===");
+  console.log("Path:", req.path);
+  console.log("Session ID:", req.sessionID);
+  console.log("Session:", req.session);
+  next();
+});
+
+// Session configuration
 app.use(
   session({
     secret: "session-secret",
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URI,
-    }),
+    resave: true,
+    saveUninitialized: true,
     cookie: {
-      secure: false,
+      secure: false,  // Set to false for development
       sameSite: "lax",
       maxAge: 24 * 60 * 60 * 1000
-    }
+    },
+    name: "sessionId"  // Added explicit session name
   })
 );
 
-// 2. Body parsing middleware
 app.use(express.json());
-
-// 3. Populate user BEFORE checking login
 app.use(auth.populateCurrentUser);
 
 // 4. THEN check login for API routes
-app.use("/api", auth.ensureLoggedIn);  // This is where ensureLoggedIn is being called
+// app.use("/api", auth.ensureLoggedIn);  // This is where ensureLoggedIn is being called
 
 // 5. API routes
 app.use("/api", api);

@@ -4,18 +4,30 @@ const socketManager = require("./server-socket.cjs");
 
 // create a new OAuth client used to verify google sign-in
 //    TODO: replace with your own CLIENT_ID
-const CLIENT_ID =
-  "257498817327-5t5f251gccfp98aqv3naqq985rehu0o9.apps.googleusercontent.com";
+const CLIENT_ID = "257498817327-5t5f251gccfp98aqv3naqq985rehu0o9.apps.googleusercontent.com";
 const client = new OAuth2Client(CLIENT_ID);
 
 // accepts a login token from the frontend, and verifies that it's legit
 function verify(token) {
+  console.log("\n=== Token Verification ===");
+  console.log("Received token:", token ? token.substring(0, 20) + "..." : "No token");
+
   return client
     .verifyIdToken({
       idToken: token,
       audience: CLIENT_ID,
     })
-    .then((ticket) => ticket.getPayload());
+    .then((ticket) => {
+      console.log("Token verified successfully");
+      const payload = ticket.getPayload();
+      console.log("Token payload:", payload);
+      return payload;
+    })
+    .catch((err) => {
+      console.error("Token verification failed. Error:", err.message);
+      console.error("Full error:", err);
+      throw err;
+    });
 }
 
 // gets user from DB, or makes a new account if it doesn't exist yet
@@ -34,16 +46,23 @@ function getOrCreateUser(user) {
 }
 
 function login(req, res) {
+  console.log("\n=== Login Attempt ===");
+  console.log("Request body:", req.body);
+  
   verify(req.body.token)
-    .then((user) => getOrCreateUser(user))
     .then((user) => {
-      // persist user in the session
+      console.log("Google user verified:", user);
+      return getOrCreateUser(user);
+    })
+    .then((user) => {
+      console.log("Database user:", user);
       req.session.user = user;
+      console.log("Session after login:", req.session);
       res.send(user);
     })
     .catch((err) => {
-      console.log(`Failed to log in: ${err}`);
-      res.status(401).send({ err });
+      console.error("Login failed:", err.message);
+      res.status(401).send({ error: err.message });
     });
 }
 
