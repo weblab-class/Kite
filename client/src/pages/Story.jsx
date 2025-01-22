@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { post } from "../utilities";
 import MenuBar from "../components/MenuBar";
 import ChatBox from "../components/ChatBox";
-import "./Story.css";
+import "./story.css";
 
 function Story() {
   const location = useLocation();
