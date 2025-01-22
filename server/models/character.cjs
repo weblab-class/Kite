@@ -32,6 +32,13 @@ const CharacterSchema = new mongoose.Schema({
     stealth: Number,
     intimidate: Number,
   },
+  messageHistory: [
+    {
+      sender: String, // e.g., "user" or "AI"
+      content: String,
+      timestamp: { type: Date, default: Date.now },
+    },
+  ],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

@@ -32,11 +32,11 @@ const socketManager = require("./server-socket.cjs");
 const { generateResponse } = require("./services/openai.js");
 
 // Import OpenAI at the top of the file
-const OpenAI = require('openai');
+const OpenAI = require("openai");
 
 // Initialize OpenAI with your API key
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY // Make sure this is in your .env file
+  apiKey: process.env.OPENAI_API_KEY, // Make sure this is in your .env file
 });
 
 // Server configuration below
@@ -122,27 +122,6 @@ app.get("*", (req, res) => {
         );
     }
   });
-});
-
-// Add this route after your other routes
-app.post("/api/chat", auth.authenticateToken, async (req, res) => {
-  try {
-    const { prompt } = req.body;
-    
-    console.log("Received chat request:", prompt);
-
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [{ role: "user", content: prompt }],
-    });
-
-    console.log("OpenAI response:", completion.choices[0].message);
-
-    res.json({ response: completion.choices[0].message.content });
-  } catch (error) {
-    console.error("Chat error:", error);
-    res.status(500).json({ message: "Error processing chat request" });
-  }
 });
 
 // port is not defined in your original code
