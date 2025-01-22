@@ -28,7 +28,7 @@ const auth = require("./auth.cjs");
 // socket stuff
 const socketManager = require("./server-socket.cjs");
 
-const { generateResponse } = require('./services/openai.js');
+const { generateResponse } = require("./services/openai.js");
 
 // Server configuration below
 // TODO change connection URL after setting up your team database
@@ -65,8 +65,8 @@ app.use(
     cookie: {
       secure: false,
       sameSite: "lax",
-      maxAge: 24 * 60 * 60 * 1000
-    }
+      maxAge: 24 * 60 * 60 * 1000,
+    },
   })
 );
 
@@ -77,7 +77,7 @@ app.use(express.json());
 app.use(auth.populateCurrentUser);
 
 // 4. THEN check login for API routes
-app.use("/api", auth.ensureLoggedIn);  // This is where ensureLoggedIn is being called
+app.use("/api", auth.ensureLoggedIn); // This is where ensureLoggedIn is being called
 
 // 5. API routes
 app.use("/api", api);
@@ -100,14 +100,16 @@ app.get("*", (req, res) => {
   });
 });
 
-app.post("/api/chat", async (req, res) => {
-    try {
-        const { prompt } = req.body;
-        const response = await generateResponse(prompt);
-        res.json({ response });
-    } catch (error) {
-        res.status(500).json({ error: "Failed to generate response" });
-    }
+// Apply authentication middleware to chat route
+app.post("/api/chat", auth.authenticateToken, async (req, res) => {
+  try {
+    const { prompt } = req.body;
+    const response = await generateResponse(prompt);
+    res.json({ response });
+  } catch (error) {
+    console.error("Chat error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 // port is not defined in your original code
