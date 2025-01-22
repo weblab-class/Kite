@@ -178,6 +178,7 @@ router.post("/chat", async (req, res) => {
   try {
     const { prompt, messageHistory } = req.body;
     console.log("Received chat request with prompt:", prompt);
+    console.log("Message history length:", messageHistory.length);
 
     // First AI agent - Chat Response
     const chatCompletion = await openai.chat.completions.create({
@@ -185,20 +186,37 @@ router.post("/chat", async (req, res) => {
       messages: [
         {
           role: "system",
-          content: "You are a storytelling AI that creates engaging narrative responses.give me the start of a story in the following vibe: ‘Welcome to the city of fog in the 1920s. You are a private investigator hired to solve a mysterious murder."
+          content:
+            "You are a storytelling AI that creates engaging narrative responses. Give me the start of a story in the following vibe: Welcome to the city of fog in the 1920s. You are a private investigator hired to solve a mysterious murder.",
         },
         ...messageHistory,
-        { role: "user", content: prompt }
+        { role: "user", content: prompt },
       ],
     });
 
     const aiResponse = chatCompletion.choices[0].message.content;
+    console.log("AI response:", aiResponse);
+
+    // Append the new AI response to the message history
+    const updatedMessageHistory = [
+      ...messageHistory,
+      { role: "user", content: prompt, timestamp: new Date() },
+      { role: "AI", content: aiResponse, timestamp: new Date() },
+    ];
+
+    // Save the updated message history to the database asynchronously
+    const saveHistoryPromise = currentCharacterId
+      ? Character.findOneAndUpdate(
+          { _id: currentCharacterId, googleid: req.user.googleid },
+          { $set: { messageHistory: updatedMessageHistory } }
+        ).exec()
+      : Promise.resolve();
 
     // Second AI agent - Options Generation
     const optionsPrompt = `Based on this conversation history and the last AI response, generate 4 distinct and interesting options for what the user could do next. Each option should be a complete sentence starting with an action verb.
 
     Conversation history:
-    ${messageHistory.map(m => `${m.role}: ${m.content}`).join('\n')}
+    ${updatedMessageHistory.map((m) => `${m.role}: ${m.content}`).join("\n")}
     AI: ${aiResponse}
 
     Generate 4 options:`;
@@ -208,29 +226,80 @@ router.post("/chat", async (req, res) => {
       messages: [
         {
           role: "system",
-          content: "You are an AI that generates contextual options for interactive storytelling. Generate clear, distinct choices."
+          content:
+            "You are an AI that generates contextual options for interactive storytelling. Generate clear, distinct choices.",
         },
         {
           role: "user",
-          content: optionsPrompt
-        }
+          content: optionsPrompt,
+        },
       ],
     });
 
     const optionsText = optionsCompletion.choices[0].message.content;
-    const options = optionsText.split('\n')
-      .filter(line => line.trim())
+    const options = optionsText
+      .split("\n")
+      .filter((line) => line.trim())
       .slice(0, 4);
 
-    res.json({ 
+    // Send the response to the client immediately
+    res.json({
       response: aiResponse,
-      options: options
+      options: options,
+    });
+
+    // Handle the asynchronous save operation
+    saveHistoryPromise.catch((err) => {
+      console.error("Error saving message history:", err);
     });
   } catch (error) {
     console.error("Chat error:", error);
     res.status(500).json({ message: "Error processing chat request" });
   }
 });
+
+// Endpoint to save message history for the current character
+router.post("/save-message-history", auth.ensureLoggedIn, (req, res) => {
+  if (!currentCharacterId) {
+    return res.status(404).send({ error: "No character currently selected" });
+  }
+
+  Character.findOneAndUpdate(
+    { _id: currentCharacterId, googleid: req.user.googleid },
+    { $set: { messageHistory: messageHistory } },
+    { new: true }
+  )
+    .then((updatedCharacter) => {
+      if (!updatedCharacter) {
+        return res.status(404).send({ error: "Character not found" });
+      }
+      res.status(200).send(updatedCharacter);
+    })
+    .catch((err) => {
+      console.log("Error saving message history:", err);
+      res.status(500).send({ error: "Error saving message history" });
+    });
+});
+
+router.get(
+  "/character/:characterId/history",
+  auth.ensureLoggedIn,
+  (req, res) => {
+    const { characterId } = req.params;
+
+    Character.findOne({ _id: characterId, googleid: req.user.googleid })
+      .then((character) => {
+        if (!character) {
+          return res.status(404).send({ error: "Character not found" });
+        }
+        res.status(200).send(character.messageHistory);
+      })
+      .catch((err) => {
+        console.log("Error fetching character history:", err);
+        res.status(500).send({ error: "Error fetching character history" });
+      });
+  }
+);
 
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
