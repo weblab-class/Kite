@@ -42,6 +42,10 @@ const openai = new OpenAI({
 // Server configuration below
 // TODO change connection URL after setting up your team database
 const mongoConnectionURL = process.env.MONGODB_URI;
+if (!mongoConnectionURL) {
+  throw new Error("Please add MONGODB_URI to your .env file");
+}
+
 // TODO change database name to the name you chose
 const databaseName = "Kite";
 
