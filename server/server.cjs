@@ -54,12 +54,14 @@ mongoose
 const app = express();
 
 // CORS configuration
-app.use(cors({
-  origin: "http://localhost:5173",  // Your Vite frontend URL
-  credentials: true,                // Allow credentials (cookies)
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed methods
-  allowedHeaders: ["Content-Type", "Authorization"] // Allowed headers
-}));
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Your Vite frontend URL
+    credentials: true, // Allow credentials (cookies)
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+  })
+);
 
 app.use(validator.checkRoutes);
 
@@ -79,16 +81,11 @@ app.use(
     resave: true,
     saveUninitialized: true,
     cookie: {
-      secure: false,  // Set to false for development
+      secure: false, // Set to false for development
       sameSite: "lax",
-<<<<<<< HEAD
-      maxAge: 24 * 60 * 60 * 1000
-    },
-    name: "sessionId"  // Added explicit session name
-=======
       maxAge: 24 * 60 * 60 * 1000,
     },
->>>>>>> openai
+    name: "sessionId", // Added explicit session name
   })
 );
 
@@ -96,11 +93,7 @@ app.use(express.json());
 app.use(auth.populateCurrentUser);
 
 // 4. THEN check login for API routes
-<<<<<<< HEAD
 // app.use("/api", auth.ensureLoggedIn);  // This is where ensureLoggedIn is being called
-=======
-app.use("/api", auth.ensureLoggedIn); // This is where ensureLoggedIn is being called
->>>>>>> openai
 
 // 5. API routes
 app.use("/api", api);
