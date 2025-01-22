@@ -11,7 +11,6 @@ function Story() {
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
-    // AI initiates the conversation
     const initiateConversation = async () => {
       setIsLoading(true);
       try {
@@ -64,13 +63,14 @@ function Story() {
     }
   };
 
-  const generateOptions = async (response) => {
-    // Simulate AI generating options
+  const generateOptions = async (lastAiMessage) => {
+    // Simulate AI generating options based on the last AI message
+    // In a real application, this could involve more complex logic or an API call
     return [
-      "Option 1 based on response",
-      "Option 2 based on response",
-      "Option 3 based on response",
-      "Option 4 based on response"
+      `Option 1 based on: ${lastAiMessage.slice(0, 10)}...`,
+      `Option 2 based on: ${lastAiMessage.slice(0, 10)}...`,
+      `Option 3 based on: ${lastAiMessage.slice(0, 10)}...`,
+      `Option 4 based on: ${lastAiMessage.slice(0, 10)}...`
     ];
   };
 
