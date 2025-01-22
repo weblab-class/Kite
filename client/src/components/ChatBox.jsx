@@ -12,6 +12,13 @@ function ChatBox({ messages, options, isLoading, handleOptionSelect }) {
     setExpandedOption(null);
   };
 
+  const handleSelectOption = () => {
+    if (expandedOption) {
+      handleOptionSelect(expandedOption);
+      setExpandedOption(null);
+    }
+  };
+
   return (
     <div className="chatbox">
       <div className="chat-messages">
@@ -36,6 +43,9 @@ function ChatBox({ messages, options, isLoading, handleOptionSelect }) {
           <div className="expanded-content">
             {expandedOption}
           </div>
+          <button className="select-button" onClick={handleSelectOption}>
+            Select
+          </button>
           <button className="return-button" onClick={handleReturn}>
             Return
           </button>

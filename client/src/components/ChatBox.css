@@ -118,6 +118,7 @@
   color: white;
 }
 
+.select-button,
 .return-button {
   padding: 8px 16px;
   border: none;
@@ -130,6 +131,7 @@
   margin-top: 10px;
 }
 
+.select-button:hover,
 .return-button:hover {
   background: rgba(159,159,159,0.5);
 } 
