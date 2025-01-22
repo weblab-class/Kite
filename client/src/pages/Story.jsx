@@ -18,15 +18,18 @@ function Story() {
       try {
         console.log("Initiating conversation with messages:", messages);
 
+        // Format the message history for OpenAI API
+        const formattedHistory = messages.map((msg) => ({
+          role: msg.role === "AI" ? "assistant" : msg.role || "user",
+          content: msg.content,
+        }));
+
         const response = await post("/api/chat", {
           prompt:
-            messages.length > 0
-              ? "Continue the story"
-              : "Start the conversation",
-          messageHistory: messages.map((msg) => ({
-            role: msg.role || msg.sender,
-            content: msg.content,
-          })),
+            formattedHistory.length > 0
+              ? "Continue the story based on the previous conversation"
+              : "Start a new detective story in the foggy city",
+          messageHistory: formattedHistory,
         });
 
         console.log("Received response:", response);
@@ -37,7 +40,8 @@ function Story() {
       } catch (error) {
         console.error("Chat error details:", error);
         console.error("Error response:", error.response);
-        setMessages([
+        setMessages((prev) => [
+          ...prev,
           {
             role: "system",
             content: `Error: ${error.message || "Unknown error occurred"}`,
@@ -57,9 +61,15 @@ function Story() {
     setIsLoading(true);
 
     try {
+      // Format the message history properly
+      const formattedHistory = [...messages, userMessage].map((msg) => ({
+        role: msg.role === "AI" ? "assistant" : msg.role || "user",
+        content: msg.content,
+      }));
+
       const response = await post("/api/chat", {
         prompt: option,
-        messageHistory: messages,
+        messageHistory: formattedHistory,
       });
 
       const aiMessage = { role: "assistant", content: response.response };

@@ -174,48 +174,46 @@ router.get("/current-character", auth.ensureLoggedIn, (req, res) => {
 });
 
 // Modify the chat endpoint to remove auth.ensureLoggedIn
-router.post("/chat", async (req, res) => {
+router.post("/chat", auth.ensureLoggedIn, async (req, res) => {
   try {
     const { prompt, messageHistory } = req.body;
-    console.log("Received chat request with prompt:", prompt);
-    console.log("Message history length:", messageHistory.length);
+    console.log("==== Chat Request Debug ====");
+    console.log("Prompt:", prompt);
+    console.log("Message history length:", messageHistory?.length || 0);
 
-    // First AI agent - Chat Response
+    // Format messages for OpenAI
+    const formattedMessages = [
+      {
+        role: "system",
+        content:
+          "You are a storytelling AI that creates engaging narrative responses. You are continuing a detective story set in a foggy city in the 1920s. Maintain consistency with the previous conversation and add new dramatic elements to keep the story engaging.",
+      },
+      ...(messageHistory || []),
+      { role: "user", content: prompt },
+    ];
+
+    console.log("Sending request to OpenAI...");
     const chatCompletion = await openai.chat.completions.create({
       model: "gpt-4",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are a storytelling AI that creates engaging narrative responses. Give me the start of a story in the following vibe: Welcome to the city of fog in the 1920s. You are a private investigator hired to solve a mysterious murder.",
-        },
-        ...messageHistory,
-        { role: "user", content: prompt },
-      ],
+      messages: formattedMessages,
+      temperature: 0.7,
+      max_tokens: 500,
     });
 
     const aiResponse = chatCompletion.choices[0].message.content;
-    console.log("AI response:", aiResponse);
+    console.log("Received response from OpenAI");
 
-    // Append the new AI response to the message history
+    // Create updated message history
     const updatedMessageHistory = [
-      ...messageHistory,
-      { role: "user", content: prompt, timestamp: new Date() },
-      { role: "AI", content: aiResponse, timestamp: new Date() },
+      ...(messageHistory || []),
+      { role: "user", content: prompt },
+      { role: "assistant", content: aiResponse },
     ];
 
-    // Save the updated message history to the database asynchronously
-    const saveHistoryPromise = currentCharacterId
-      ? Character.findOneAndUpdate(
-          { _id: currentCharacterId, googleid: req.user.googleid },
-          { $set: { messageHistory: updatedMessageHistory } }
-        ).exec()
-      : Promise.resolve();
-
     // Second AI agent - Options Generation
-    const optionsPrompt = `Based on this conversation history and the last AI response, generate 4 distinct and interesting options for what the user could do next. Each option should be a complete sentence starting with an action verb.
+    const optionsPrompt = `Based on this story, generate 4 distinct and interesting options for what the user could do next. Each option should be a complete sentence starting with an action verb.
 
-    Conversation history:
+    Story so far:
     ${updatedMessageHistory.map((m) => `${m.role}: ${m.content}`).join("\n")}
     AI: ${aiResponse}
 
@@ -227,7 +225,7 @@ router.post("/chat", async (req, res) => {
         {
           role: "system",
           content:
-            "You are an AI that generates contextual options for interactive storytelling. Generate clear, distinct choices.",
+            "You are an AI that generates contextual options for interactive storytelling. Generate clear, distinct choices that would make sense for a detective in a noir mystery.",
         },
         {
           role: "user",
@@ -240,21 +238,32 @@ router.post("/chat", async (req, res) => {
     const options = optionsText
       .split("\n")
       .filter((line) => line.trim())
-      .slice(0, 4);
+      .slice(0, 4)
+      .map((option) => option.replace(/^\d+\.\s*/, "")); // Remove numbering if present
 
-    // Send the response to the client immediately
+    // Save the updated message history to the database
+    if (currentCharacterId) {
+      try {
+        await Character.findOneAndUpdate(
+          { _id: currentCharacterId },
+          { $set: { messageHistory: updatedMessageHistory } }
+        ).exec();
+      } catch (dbError) {
+        console.error("Error saving to database:", dbError);
+      }
+    }
+
+    // Send the response to the client
     res.json({
       response: aiResponse,
       options: options,
     });
-
-    // Handle the asynchronous save operation
-    saveHistoryPromise.catch((err) => {
-      console.error("Error saving message history:", err);
-    });
   } catch (error) {
     console.error("Chat error:", error);
-    res.status(500).json({ message: "Error processing chat request" });
+    res.status(500).json({
+      message: "Error processing chat request",
+      error: error.message,
+    });
   }
 });
 
