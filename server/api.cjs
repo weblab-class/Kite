@@ -7,6 +7,7 @@
 |
 */
 const express = require("express");
+const OpenAI = require("openai");
 
 // import models so we can interact with the database
 const User = require("./models/user.cjs");
@@ -20,6 +21,11 @@ const router = express.Router();
 
 //initialize socket
 const socketManager = require("./server-socket.cjs");
+
+// Initialize OpenAI with your API key
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 router.post("/login", auth.login);
 router.post("/logout", auth.logout);
@@ -165,6 +171,25 @@ router.get("/current-character", auth.ensureLoggedIn, (req, res) => {
       console.log("Error getting current character:", err);
       res.status(500).send({ error: "Error getting current character" });
     });
+});
+
+// Modified chat endpoint to use GPT-4o
+router.post("/chat", async (req, res) => {
+  try {
+    const { prompt } = req.body;
+    console.log("Received chat request with prompt:", prompt);
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o", // Changed to GPT-4o
+      messages: [{ role: "user", content: prompt }],
+    });
+
+    console.log("OpenAI response received");
+    res.json({ response: completion.choices[0].message.content });
+  } catch (error) {
+    console.error("Chat error:", error);
+    res.status(500).json({ message: "Error processing chat request" });
+  }
 });
 
 // anything else falls to this "not found" case
