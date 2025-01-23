@@ -11,7 +11,7 @@ function Login() {
       response_type: "id_token",
       client_id:
         "257498817327-5t5f251gccfp98aqv3naqq985rehu0o9.apps.googleusercontent.com",
-      redirect_uri: "http://localhost:5173/start",
+      // redirect_uri: "http://localhost:5173/start",
       scope: "email profile openid",
       prompt: "select_account",
       nonce: Math.random().toString(36).substring(2, 15),
@@ -22,6 +22,7 @@ function Login() {
       .join("&");
 
     window.location.href = `${googleLoginURL}?${queryString}`;
+    navigate("/start");
   };
 
   return (
