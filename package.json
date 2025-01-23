@@ -20,7 +20,7 @@
     "fs": "^0.0.1-security",
     "google-auth-library": "^9.15.0",
     "jsonwebtoken": "^9.0.2",
-    "mangodb": "^1.0.0",
+    "mongodb": "^1.0.0",
     "mongoose": "^8.9.5",
     "node-modules": "^0.0.1",
     "openai": "^4.79.4",

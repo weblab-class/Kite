@@ -111,7 +111,7 @@ app.use(auth.populateCurrentUser);
 app.use("/api", api);
 
 // load the compiled react files, which will serve /index.html and /bundle.js
-const reactPath = path.resolve(__dirname, "..", "client", "dist");
+const reactPath = path.resolve(__dirname, "..", "dist");
 app.use(express.static(reactPath));
 
 // for all other routes, render index.html and let react router handle it
