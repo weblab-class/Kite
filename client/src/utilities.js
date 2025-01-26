@@ -35,11 +35,14 @@ function convertToJSON(res) {
     });
 }
 
+const isProduction = process.env.NODE_ENV === 'production';
+const baseURL = isProduction ? 'https://kite-vs0f.onrender.com' : 'http://localhost:3000';
+
 // Helper code to make a get request. Default parameter of empty JSON Object for params.
 // Returns a Promise to a JSON Object.
 export function get(endpoint, params = {}) {
   const fullPath = endpoint + "?" + formatParams(params);
-  return fetch(`http://localhost:3000${fullPath}`, {
+  return fetch(`${baseURL}${fullPath}`, {
     method: "GET",
     credentials: "include",  // Important for cookies
     headers: {
@@ -56,7 +59,7 @@ export function get(endpoint, params = {}) {
 // Helper code to make a post request. Default parameter of empty JSON Object for params.
 // Returns a Promise to a JSON Object.
 export function post(endpoint, params = {}) {
-  return fetch(`http://localhost:3000${endpoint}`, {
+  return fetch(`${baseURL}${endpoint}`, {
     method: "POST",
     credentials: "include",  // Important for cookies
     headers: {

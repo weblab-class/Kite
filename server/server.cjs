@@ -65,10 +65,13 @@ mongoose
 // create a new express server
 const app = express();
 
+const isProduction = process.env.NODE_ENV === 'production';
+const allowedOrigin = isProduction ? 'https://kite-vs0f.onrender.com' : 'http://localhost:5173';
+
 // CORS configuration
 app.use(
   cors({
-    origin: "http://localhost:5173", // Your Vite frontend URL
+    origin: allowedOrigin, // Use the appropriate origin
     credentials: true, // Allow credentials (cookies)
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
