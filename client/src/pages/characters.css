@@ -49,7 +49,8 @@ body,
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 2rem;
+  margin-top: 1rem;
+  gap: 20px;
 }
 
 .v13_59 {
@@ -95,19 +96,19 @@ body,
 }
 
 .v13_61 {
-  width: 100%;
   color: rgba(159, 159, 159, 1);
   font-family: "Pixelify Sans", sans-serif;
-  font-size: clamp(2.5rem, 4vw, 4rem);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
   text-align: center;
   cursor: pointer;
   transition: transform 0.3s ease;
-  margin-top: 2rem;
-  padding: 2rem;
+  padding: 15px 30px;
+  margin: 0;
 }
 
 .v13_61:hover {
   transform: scale(1.05);
+  color: rgba(200, 200, 200, 1);
 }
 
 .v13_42 {
@@ -125,7 +126,7 @@ body,
   font-family: "Pixelify Sans", sans-serif;
   font-size: clamp(3rem, 5vw, 4rem);
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .find_character {
@@ -235,4 +236,13 @@ body,
   padding: 0 20px;
   min-width: min-content;  /* Ensure it can grow beyond container */
   align-items: center;
+}
+
+/* Modify the button container */
+.character-actions {
+  display: flex;
+  gap: 20px;  /* Space between buttons */
+  margin-top: 20px;  /* Reduced from 2rem */
+  justify-content: center;
+  flex-wrap: wrap;  /* Allow wrapping on very small screens */
 }

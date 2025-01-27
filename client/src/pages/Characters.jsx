@@ -106,12 +106,14 @@ function Characters() {
           ) : (
             <>
               {charactersList}
-              <span onClick={handleCreateNewCharacterClick} className="v13_61">
-                Create New Character
-              </span>
-              <span onClick={handleDeleteMode} className="v13_61">
-                Delete Character
-              </span>
+              <div className="character-actions">
+                <span onClick={handleCreateNewCharacterClick} className="v13_61">
+                  Create New Character
+                </span>
+                <span onClick={handleDeleteMode} className="v13_61">
+                  Delete Character
+                </span>
+              </div>
             </>
           )}
         </div>
