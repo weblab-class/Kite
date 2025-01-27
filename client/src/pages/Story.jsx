@@ -1,45 +1,67 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { post } from "../utilities";
+import { useLocation, useNavigate } from "react-router-dom";
+import { post, get } from "../utilities";
 import MenuBar from "../components/MenuBar";
 import ChatBox from "../components/ChatBox";
 import "./story.css";
 
 function Story() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [messages, setMessages] = useState(location.state?.chatHistory || []);
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState([]);
+  const [character, setCharacter] = useState(null);
 
   useEffect(() => {
     const initiateConversation = async () => {
       setIsLoading(true);
       try {
-        console.log("Initiating conversation with messages:", messages);
+        // First, fetch the character data
+        const characterData = await get("/api/current-character");
+        if (!characterData) {
+          console.error("No character selected");
+          navigate("/characters");
+          return;
+        }
 
-        // Format the message history for OpenAI API
-        const formattedHistory = messages.map((msg) => ({
-          role: msg.role === "AI" ? "assistant" : msg.role || "user",
-          content: msg.content,
-        }));
+        setCharacter(characterData);
 
-        const response = await post("/api/chat", {
-          prompt:
-            formattedHistory.length > 0
-              ? "Continue the story based on the previous conversation"
-              : "Start a new detective story in the foggy city",
-          messageHistory: formattedHistory,
-        });
+        // Handle both new conversations and existing chat history
+        if (messages.length === 0) {
+          console.log("Initiating new conversation");
+          const response = await post("/api/chat", {
+            prompt: "Start a new detective story in the foggy city",
+            messageHistory: [],
+            character: characterData,
+          });
 
-        console.log("Received response:", response);
+          const aiMessage = { role: "assistant", content: response.response };
+          setMessages([aiMessage]);
+          setOptions(response.options);
+        } else {
+          // For existing chat history, get new options
+          console.log("Continuing existing conversation");
+          const formattedHistory = messages.map((msg) => ({
+            role: msg.role === "AI" ? "assistant" : msg.role || "user",
+            content: msg.content,
+          }));
 
-        const aiMessage = { role: "assistant", content: response.response };
-        setMessages((prev) => [...prev, aiMessage]);
-        setOptions(response.options);
+          const response = await post("/api/chat", {
+            prompt: "Continue the story based on the previous conversation",
+            messageHistory: formattedHistory,
+            character: characterData,
+          });
+
+          setOptions(response.options);
+        }
       } catch (error) {
         console.error("Chat error details:", error);
-        console.error("Error response:", error.response);
+        if (error.response?.status === 404) {
+          navigate("/characters");
+          return;
+        }
         setMessages((prev) => [
           ...prev,
           {
@@ -53,7 +75,7 @@ function Story() {
     };
 
     initiateConversation();
-  }, []); // Only run once on component mount
+  }, [navigate]);
 
   const handleOptionSelect = async (option) => {
     const userMessage = { role: "user", content: option };
@@ -61,7 +83,6 @@ function Story() {
     setIsLoading(true);
 
     try {
-      // Format the message history properly
       const formattedHistory = [...messages, userMessage].map((msg) => ({
         role: msg.role === "AI" ? "assistant" : msg.role || "user",
         content: msg.content,
@@ -70,6 +91,7 @@ function Story() {
       const response = await post("/api/chat", {
         prompt: option,
         messageHistory: formattedHistory,
+        character: character,
       });
 
       const aiMessage = { role: "assistant", content: response.response };

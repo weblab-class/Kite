@@ -17,6 +17,8 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<App />} errorElement={<NotFound />}>

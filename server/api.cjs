@@ -177,16 +177,59 @@ router.get("/current-character", auth.ensureLoggedIn, (req, res) => {
 router.post("/chat", auth.ensureLoggedIn, async (req, res) => {
   try {
     const { prompt, messageHistory } = req.body;
-    console.log("==== Chat Request Debug ====");
-    console.log("Prompt:", prompt);
-    console.log("Message history length:", messageHistory?.length || 0);
 
-    // Format messages for OpenAI
+    // Fetch current character
+    const character = await Character.findOne({ _id: currentCharacterId });
+    if (!character) {
+      throw new Error("No character selected");
+    }
+
+    // Format messages for OpenAI with actual character stats
     const formattedMessages = [
       {
         role: "system",
-        content:
-          "You are a storytelling AI that creates engaging narrative responses. You are continuing a detective story set in a foggy city in the 1920s. Maintain consistency with the previous conversation and add new dramatic elements to keep the story engaging.",
+        content: `You are a storytelling AI creating a noir detective story set in a foggy city in the 1920s.
+
+        Current Character:
+        Name: ${character.player_info.character_name}
+        Age: ${character.player_info.age}
+        Gender: ${character.player_info.gender}
+        Occupation: ${
+          character.player_info.job === "medium"
+            ? "Psychic Medium"
+            : "Private Detective"
+        }
+
+        Character Attributes:
+        - Dexterity: ${
+          character.stats.dexterity
+        } (physical agility and reflexes)
+        - Education: ${
+          character.stats.education
+        } (formal learning and knowledge)
+        - Power: ${
+          character.stats.power
+        } (force of personality and supernatural connection)
+        - Size: ${character.stats.size} (physical presence)
+        - Wisdom/Sanity: ${
+          character.stats.wisdom
+        } (mental stability and insight)
+        - Appearance: ${
+          character.stats.appearance
+        } (physical attractiveness and presence)
+        - Constitution: ${
+          character.stats.constitution
+        } (physical health and stamina)
+        - Strength: ${character.stats.strength} (physical might)
+        - Luck: ${character.stats.luck} (fortune and chance)
+
+        Incorporate these attributes naturally into the story. For example:
+        - If they have high Power and are a Medium, emphasize their supernatural sensitivity
+        - If they have high Education, they might notice historical or academic details
+        - If they have low Wisdom/Sanity, they might struggle with disturbing revelations
+        - Their Luck score should influence how fortunate/unfortunate random events are
+
+        Maintain consistency with the previous conversation and create an atmospheric noir detective story with supernatural elements.`,
       },
       ...(messageHistory || []),
       { role: "user", content: prompt },
