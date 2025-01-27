@@ -86,9 +86,9 @@ router.post("/new-character", auth.ensureLoggedIn, async (req, res) => {
   try {
     // If we're editing an existing character
     if (currentCharacterId) {
-      const character = await Character.findOne({ 
-        _id: currentCharacterId, 
-        googleid: req.user.googleid 
+      const character = await Character.findOne({
+        _id: currentCharacterId,
+        googleid: req.user.googleid,
       });
 
       if (!character) {
@@ -98,11 +98,16 @@ router.post("/new-character", auth.ensureLoggedIn, async (req, res) => {
       // Update the appropriate fields based on what was sent
       if (req.body.new_character_info) {
         character.player_info = {
-          character_name: req.body.new_character_info.characterName || character.player_info.character_name,
+          character_name:
+            req.body.new_character_info.characterName ||
+            character.player_info.character_name,
           age: req.body.new_character_info.age || character.player_info.age,
           job: req.body.new_character_info.job || character.player_info.job,
-          gender: req.body.new_character_info.gender || character.player_info.gender,
-          player_name: req.body.new_character_info.playerName || character.player_info.player_name,
+          gender:
+            req.body.new_character_info.gender || character.player_info.gender,
+          player_name:
+            req.body.new_character_info.playerName ||
+            character.player_info.player_name,
         };
       } else if (req.body.stats) {
         character.stats = req.body.stats;
@@ -113,7 +118,7 @@ router.post("/new-character", auth.ensureLoggedIn, async (req, res) => {
       const updatedCharacter = await character.save();
       return res.status(200).send(updatedCharacter);
     }
-    
+
     // If we're creating a new character
     if (!characterInProgress && req.body.new_character_info) {
       // First step: Creating new character with player info
@@ -205,6 +210,16 @@ router.get("/current-character", auth.ensureLoggedIn, (req, res) => {
     });
 });
 
+router.post("/delete-character", auth.ensureLoggedIn, (req, res) => {
+  const { characterId } = req.body;
+  Character.deleteOne({ _id: characterId, googleid: req.user.googleid })
+    .then(() => res.status(200).send({ message: "Character deleted" }))
+    .catch((err) => {
+      console.log("Error deleting character:", err);
+      res.status(500).send({ error: "Error deleting character" });
+    });
+});
+
 // Modify the chat endpoint to remove auth.ensureLoggedIn
 router.post("/chat", auth.ensureLoggedIn, async (req, res) => {
   try {
@@ -214,9 +229,9 @@ router.post("/chat", auth.ensureLoggedIn, async (req, res) => {
     console.log("Message history length:", messageHistory?.length || 0);
 
     // Get current character info
-    const character = await Character.findOne({ 
-      _id: currentCharacterId, 
-      googleid: req.user.googleid 
+    const character = await Character.findOne({
+      _id: currentCharacterId,
+      googleid: req.user.googleid,
     });
 
     if (!character) {
@@ -227,13 +242,12 @@ router.post("/chat", auth.ensureLoggedIn, async (req, res) => {
     const formattedMessages = [
       {
         role: "system",
-        content:
-          `You are a storytelling AI that creates engaging narrative responses in second person perspective. 
-           You are telling a detective story set in a foggy city in the 1920s. 
+        content: `You are a storytelling AI that creates engaging narrative responses in second person perspective.
+           You are telling a detective story set in a foggy city in the 1920s.
            The main character is ${character.player_info.character_name}, a ${character.player_info.age}-year-old ${character.player_info.job}.
            Always address the player as "you" and use ${character.player_info.character_name} as the character name frequently.
-           Consider their stats (STR:${character.stats.strength}, DEX:${character.stats.dexterity}, INT:${character.stats.intelligence}, 
-           CON:${character.stats.constitution}, APP:${character.stats.appearance}, POW:${character.stats.power}, 
+           Consider their stats (STR:${character.stats.strength}, DEX:${character.stats.dexterity}, INT:${character.stats.intelligence},
+           CON:${character.stats.constitution}, APP:${character.stats.appearance}, POW:${character.stats.power},
            EDU:${character.stats.education}, SIZ:${character.stats.size}) and skills when crafting the story.
            Keep responses engaging and dramatic (<= 150 words).`,
       },

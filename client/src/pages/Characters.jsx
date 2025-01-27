@@ -7,6 +7,7 @@ import MenuBar from "../components/MenuBar";
 function Characters() {
   const [characters, setCharacters] = useState([]);
   const [selectedCharacterId, setSelectedCharacterId] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const navigate = useNavigate();
 
@@ -16,15 +17,35 @@ function Characters() {
 
   const handleCharacterSelect = (characterId) => {
     console.log("Selected character:", characterId);
-    post("/api/set-current-character", { characterId: characterId })
-      .then((res) => {
-        console.log("Selected character:", res.currentCharacterId);
-        setSelectedCharacterId(characterId);
-        navigate("/character-details", { state: { characterId } });
-      })
-      .catch((err) => {
-        console.log("Error selecting character:", err);
-      });
+    if (isDeleting) {
+      if (window.confirm("Are you sure you want to delete this character?")) {
+        post("/api/delete-character", { characterId: characterId })
+          .then(() => {
+            setCharacters(
+              characters.filter((char) => char._id !== characterId)
+            );
+            setIsDeleting(false);
+          })
+          .catch((err) => {
+            console.log("Error deleting character:", err);
+            alert("Failed to delete character");
+          });
+      }
+    } else {
+      post("/api/set-current-character", { characterId: characterId })
+        .then((res) => {
+          console.log("Selected character:", res.currentCharacterId);
+          setSelectedCharacterId(characterId);
+          navigate("/character-details", { state: { characterId } });
+        })
+        .catch((err) => {
+          console.log("Error selecting character:", err);
+        });
+    }
+  };
+
+  const handleDeleteMode = () => {
+    setIsDeleting(true);
   };
 
   useEffect(() => {
@@ -64,13 +85,30 @@ function Characters() {
       <MenuBar />
       <div className="v13_40">
         <div className="v13_60">
-          <div className="v13_59"></div>
-          {charactersList}
-          <span onClick={handleCreateNewCharacterClick} className="v13_61">
-            Create New Character
+          <span className="delete-instructions">
+            {isDeleting ? "Delete Character" : "Choose ur character"}
           </span>
+          <div className="v13_59"></div>
+          {isDeleting ? (
+            <div className="delete-instructions">
+              <div className="find_character">Select a character to delete</div>
+              {charactersList}
+              <div className="v13_61" onClick={() => setIsDeleting(false)}>
+                Cancel
+              </div>
+            </div>
+          ) : (
+            <>
+              {charactersList}
+              <span onClick={handleCreateNewCharacterClick} className="v13_61">
+                Create New Character
+              </span>
+              <span onClick={handleDeleteMode} className="v13_61">
+                Delete Character
+              </span>
+            </>
+          )}
         </div>
-        <span className="v13_42">Choose ur character</span>
       </div>
     </div>
   );
