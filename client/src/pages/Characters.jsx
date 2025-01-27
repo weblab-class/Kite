@@ -91,9 +91,6 @@ function Characters() {
       <MenuBar />
       <div className="v13_40">
         <div className="v13_60">
-          <span className="delete-instructions">
-            {isDeleting ? "Delete Character" : "Choose ur character"}
-          </span>
           <div className="v13_59"></div>
           {isDeleting ? (
             <div className="delete-instructions">
@@ -105,7 +102,6 @@ function Characters() {
             </div>
           ) : (
             <>
-              {charactersList}
               <div className="character-actions">
                 <span onClick={handleCreateNewCharacterClick} className="v13_61">
                   Create New Character
@@ -114,6 +110,10 @@ function Characters() {
                   Delete Character
                 </span>
               </div>
+              <span className="delete-instructions">
+                Or choose your character
+              </span>
+              {charactersList}
             </>
           )}
         </div>

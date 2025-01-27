@@ -66,11 +66,11 @@ body,
 .existing-characters {
   color: rgba(255, 255, 255, 1);
   font-family: "Pixelify Sans", sans-serif;
-  font-size: clamp(2.5rem, 4vw, 4rem);
+  font-size: clamp(2rem, 3vw, 3rem);
   cursor: pointer;
   transition: transform 0.3s ease;
   white-space: nowrap;
-  padding: 10px 20px;
+  padding: 8px 16px;
   background: rgba(217, 217, 217, 0.1);
   border-radius: 15px;
   min-width: max-content;
@@ -102,7 +102,7 @@ body,
   text-align: center;
   cursor: pointer;
   transition: transform 0.3s ease;
-  padding: 15px 30px;
+  padding: 10px 20px;
   margin: 0;
 }
 
@@ -121,12 +121,13 @@ body,
 }
 
 .delete-instructions {
-  color: rgba(8, 24, 34, 1);
+  color: rgba(200, 200, 200, 1);
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   font-family: "Pixelify Sans", sans-serif;
   font-size: clamp(3rem, 5vw, 4rem);
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 10px;
+  order: 2;
 }
 
 .find_character {
@@ -216,11 +217,13 @@ body,
 .character-list-container {
   width: 100%;
   overflow-x: auto;
-  margin: 20px 0;
-  padding: 20px 0;
+  margin: 10px 0;
+  padding: 10px 0;
+  max-height: 120px;
   /* Hide scrollbar but keep functionality */
-  scrollbar-width: none;  /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  order: 3;
 }
 
 /* Hide scrollbar for Chrome/Safari/Opera */
@@ -241,8 +244,9 @@ body,
 /* Modify the button container */
 .character-actions {
   display: flex;
-  gap: 20px;  /* Space between buttons */
-  margin-top: 20px;  /* Reduced from 2rem */
-  justify-content: center;
-  flex-wrap: wrap;  /* Allow wrapping on very small screens */
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+  order: 1;
 }
