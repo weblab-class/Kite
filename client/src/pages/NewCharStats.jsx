@@ -101,6 +101,16 @@ function NewCharStats() {
         Click on the dice to roll the stats for your character
       </span>
       <span className="v22_62">Total: {total}</span>
+      {isEditing && (
+        <span
+          className="back-button"
+          onClick={() => navigate("/character-details")}
+          role="button"
+          tabIndex={0}
+        >
+          Back to Character
+        </span>
+      )}
       <span className="v24_88" onClick={handleNext} role="button" tabIndex={0}>
         Next
       </span>

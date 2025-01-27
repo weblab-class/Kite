@@ -141,6 +141,21 @@ body {
   transform: scale(1.1);
 }
 
+.back-button {
+  color: rgba(255, 255, 255, 1);
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: clamp(1.5rem, 2.5vw, 2.5rem);
+  position: absolute;
+  bottom: 5%;
+  left: 5%;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.back-button:hover {
+  transform: scale(1.1);
+}
+
 /* Media queries for better mobile responsiveness */
 @media screen and (max-width: 768px) {
   .v22_50 {

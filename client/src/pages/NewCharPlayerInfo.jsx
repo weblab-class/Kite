@@ -151,6 +151,16 @@ function NewCharPlayerInfo() {
           position="player-name"
         />
       </div>
+      {isEditing && (
+        <span
+          className="back-button"
+          onClick={() => navigate("/character-details")}
+          role="button"
+          tabIndex={0}
+        >
+          Back to Character
+        </span>
+      )}
       <span
         className="next-button"
         onClick={handleNext}
