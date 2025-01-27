@@ -186,7 +186,7 @@ router.post("/chat", auth.ensureLoggedIn, async (req, res) => {
       {
         role: "system",
         content:
-          "You are a storytelling AI that creates engaging narrative responses. You are continuing a detective story set in a foggy city in the 1920s. Maintain consistency with the previous conversation and add new dramatic elements to keep the story engaging.",
+          "You are a storytelling AI that creates engaging narrative responses. You are continuing a detective story set in a foggy city in the 1920s. Maintain consistency with the previous conversation and add new dramatic elements to keep the story engaging (<= 150 words)",
       },
       ...(messageHistory || []),
       { role: "user", content: prompt },
