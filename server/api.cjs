@@ -76,7 +76,6 @@ router.post("/new-character", auth.ensureLoggedIn, async (req, res) => {
   console.log("Received request body:", req.body);
   console.log("User:", req.user);
 
-  // Check if user is logged in
   if (!req.user) {
     return res
       .status(401)
@@ -119,9 +118,8 @@ router.post("/new-character", auth.ensureLoggedIn, async (req, res) => {
       return res.status(200).send(updatedCharacter);
     }
 
-    // If we're creating a new character
+    // If we're creating a new character, continue with existing logic
     if (!characterInProgress && req.body.new_character_info) {
-      // First step: Creating new character with player info
       characterInProgress = new Character({
         googleid: req.user.googleid,
         player_info: {
@@ -133,10 +131,8 @@ router.post("/new-character", auth.ensureLoggedIn, async (req, res) => {
         },
       });
     } else if (characterInProgress && req.body.stats) {
-      // Second step: Adding stats
       characterInProgress.stats = req.body.stats;
     } else if (characterInProgress && req.body.skills) {
-      // Final step: Adding skills and saving to database
       characterInProgress.skills = req.body.skills;
 
       // Save the character to MongoDB
@@ -275,6 +271,20 @@ router.post("/chat", auth.ensureLoggedIn, async (req, res) => {
 
     // Second AI agent - Options Generation
     const optionsPrompt = `Based on this story, generate 4 distinct and interesting options for what the user could do next. Each option should be a complete sentence starting with an action verb.
+     Consider the character skills
+           (libraryUse:${character.skills.libraryUse}, listen:${
+      character.skills.listen
+    }, firstAid:${character.skills.firstAid},
+           medicine:${character.skills.medicine}, fighting:${
+      character.skills.fighting
+    }, psychology: ${character.skills.psychology}),
+           dodge:${character.skills.dodge}, spotHidden: ${
+      character.skills.spotHidden
+    }, stealth:${character.skills.stealth}, intimidate:${
+      character.skills.intimidate
+    }).
+           If the value of a skill is nonzero, you may come up with an option that uses that skill.
+           If the value of a skill is zero, you should not come up with an option that uses that skill.
 
     Story so far:
     ${updatedMessageHistory.map((m) => `${m.role}: ${m.content}`).join("\n")}
