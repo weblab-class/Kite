@@ -72,9 +72,7 @@ function NewCharSkills() {
   };
 
   const handleNext = async () => {
-    if (isEditing) {
-      alert("Skills cannot be modified after character creation");
-    }
+
 
     // Validate skills only if creating new character
     if (!isEditing && remainingPoints > 0) {

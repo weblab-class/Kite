@@ -56,9 +56,6 @@ function NewCharPlayerInfo() {
   };
 
   const handleNext = () => {
-    if (isEditing) {
-      alert("Character information cannot be modified after creation");
-    }
 
     // Validate form data
     if (!formData.characterName || !formData.age || !formData.gender || !formData.playerName) {
@@ -100,6 +97,7 @@ function NewCharPlayerInfo() {
           value={formData.characterName}
           onChange={handleInputChange("characterName")}
           position="character-name"
+          disabled={isEditing}
         />
         <FormField
           label="Age:"
@@ -110,6 +108,7 @@ function NewCharPlayerInfo() {
           min="1"
           max="120"
           placeholder="Enter age (1-120)"
+          disabled={isEditing}
         />
         <div className="form-field">
           <label className="form-label">Job:</label>
@@ -122,6 +121,7 @@ function NewCharPlayerInfo() {
                 checked={selectedJob === "medium"}
                 onChange={(e) => handleJobChange(e)}
                 className="job-radio"
+                disabled={isEditing}
               />
               <span className="job-label-text">Medium</span>
             </label>
@@ -133,6 +133,7 @@ function NewCharPlayerInfo() {
                 checked={selectedJob === "detective"}
                 onChange={(e) => handleJobChange(e)}
                 className="job-radio"
+                disabled={isEditing}
               />
               <span className="job-label-text">Detective</span>
             </label>
@@ -143,12 +144,14 @@ function NewCharPlayerInfo() {
           value={formData.gender}
           onChange={handleInputChange("gender")}
           position="gender"
+          disabled={isEditing}
         />
         <FormField
           label="Player Name:"
           value={formData.playerName}
           onChange={handleInputChange("playerName")}
           position="player-name"
+          disabled={isEditing}
         />
       </div>
       {isEditing && (
