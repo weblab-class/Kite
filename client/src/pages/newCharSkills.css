@@ -19,53 +19,48 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  overflow: hidden;
+  overflow-y: auto;  /* Allow vertical scrolling if needed */
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
 }
 
 .v21_93 {
-  width: 30vw;
   color: rgba(159, 159, 159, 1);
-  position: absolute;
-  top: 5vh;
-  left: 50%;
-  transform: translateX(-50%);
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   font-family: "Pixelify Sans";
   font-weight: normal;
-  font-size: clamp(3rem, 8vw, 8rem);
-  opacity: 1;
+  font-size: clamp(2rem, 5vw, 4rem);
   text-align: center;
+  margin-top: 2vh;
+  margin-bottom: 1vh;
 }
 
 .v24_90 {
   color: rgba(159, 159, 159, 1);
   font-family: "Pixelify Sans", sans-serif;
-  font-size: clamp(1.5rem, 3vw, 48px);
-  position: absolute;
-  top: 74px;
-  left: 5%;
+  font-size: clamp(1.2rem, 2vw, 2rem);
+  margin-bottom: 2vh;
 }
 
 .skills-container {
   width: 90%;
   max-width: 1200px;
-  margin: 4rem auto;
+  margin: 2vh auto;
   display: flex;
   flex-direction: column;
-  gap: 8rem;
+  gap: 2vh;
+  padding: 0 2vw;
 }
 
 .skills-row {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 2rem;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1vh 1vw;
+  justify-items: center;
 }
 
-/* Common styles for all skill spans */
+/* Remove the common styles for skill spans since we're using skill-item now */
 .v21_75,
 .v21_76,
 .v21_87,
@@ -76,100 +71,90 @@ body {
 .v21_91,
 .v21_89,
 .v21_77 {
-  color: rgba(159, 159, 159, 1);
-  font-family: "Pixelify Sans", sans-serif;
-  font-size: clamp(1.2rem, 2.5vw, 44px);
-  text-align: left;
-  flex: 1;
-  min-width: 150px;
+  /* Remove these styles as they're no longer needed */
+  display: none;
+}
+
+.skill-item {
+  width: 100%;
+  max-width: 180px;
   background-image: url("../images/scroll.png");
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-}
-
-.next-button {
-  color: rgba(255, 255, 255, 1);
-  font-family: "Pixelify Sans", sans-serif;
-  font-size: clamp(1.5rem, 2.5vw, 2.5rem);
-  position: absolute;
-  bottom: 5%;
-  right: 5%;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.next-button:hover {
-  transform: scale(1.1);
-}
-
-/* Media queries for better mobile responsiveness */
-@media screen and (max-width: 768px) {
-  .skills-container {
-    gap: 4rem;
-    margin: 2rem auto;
-  }
-
-  .skills-row {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    text-align: center;
-  }
-
-  .v21_75,
-  .v21_76,
-  .v21_87,
-  .v21_79,
-  .v21_81,
-  .v21_83,
-  .v21_85,
-  .v21_91,
-  .v21_89,
-  .v21_77 {
-    min-width: unset;
-    text-align: center;
-  }
-}
-
-/* Add these new styles to your existing CSS */
-.skill-item {
+  padding: clamp(10px, 2vh, 20px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 10px;
-  background-image: url("../images/scroll.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  padding: 40px; /* Adjust padding as needed */
+  aspect-ratio: 1.2;
+  justify-content: center;  /* Center content vertically */
+  margin-bottom: 0.5vh;  /* For absolute positioning of input if needed */
+}
+
+.skill-name {
+  color: rgba(159, 159, 159, 1);
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: clamp(1rem, 1.2vw, 1rem);
+  text-align: center;
+  margin-bottom: 0vh;  /* Increased from 0.5vh for better spacing */
+  font-weight: bold;
 }
 
 .skill-item input {
-  width: 60px;
+  width: clamp(30px, 6vw, 45px);
   text-align: center;
-  margin-top: 5px;
-  padding: 5px;
+  padding: 0.3vh;
+  height: 35px;
   background-color: transparent;
   border: 1px solid rgba(159, 159, 159, 1);
   color: rgba(42, 58, 68, 1);
   font-family: "Pixelify Sans", sans-serif;
-  font-size: 1.2rem;
+  font-size: clamp(1.2rem, 1.5vw, 2rem);
+  margin-top: 15px;
+  margin-bottom: auto;
+  position: relative;
 }
 
-.skill-item input:focus {
-  outline: none;
-  border-color: white;
-}
-
-.skill-name {
-  margin-bottom: 5px;
-  color: rgba(42, 58, 68, 1);
+/* Navigation buttons */
+.next-button,
+.back-button {
+  color: rgba(255, 255, 255, 1);
   font-family: "Pixelify Sans", sans-serif;
-  font-size: 1.2rem;
+  font-size: clamp(1.2rem, 2vw, 2rem);
+  position: fixed;
+  bottom: 3vh;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  padding: 1vh 2vw;
 }
 
-/* Remove the default spinner buttons from number inputs */
+.back-button {
+  left: 5vw;
+}
+
+.next-button {
+  right: 5vw;
+}
+
+.next-button:hover,
+.back-button:hover {
+  transform: scale(1.1);
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 768px) {
+  .skills-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1vh 2vw;
+  }
+
+  .skill-item {
+    max-width: 150px;
+    padding: clamp(8px, 2vh, 15px);
+  }
+}
+
+/* Hide number input spinners */
 .skill-item input::-webkit-outer-spin-button,
 .skill-item input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -178,19 +163,4 @@ body {
 
 .skill-item input[type="number"] {
   -moz-appearance: textfield;
-}
-
-.back-button {
-  color: rgba(255, 255, 255, 1);
-  font-family: "Pixelify Sans", sans-serif;
-  font-size: clamp(1.5rem, 2.5vw, 2.5rem);
-  position: absolute;
-  bottom: 5%;
-  left: 5%;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.back-button:hover {
-  transform: scale(1.1);
 }

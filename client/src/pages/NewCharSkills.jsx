@@ -100,6 +100,23 @@ function NewCharSkills() {
     }
   };
 
+  // Add this helper function to format skill names
+  const formatSkillName = (skillName) => {
+    switch(skillName) {
+      case 'libraryUse': return 'Library Use';
+      case 'listen': return 'Listen';
+      case 'firstAid': return 'First Aid';
+      case 'medicine': return 'Medicine';
+      case 'fighting': return 'Fighting';
+      case 'psychology': return 'Psychology';
+      case 'dodge': return 'Dodge';
+      case 'spotHidden': return 'Spot Hidden';
+      case 'stealth': return 'Stealth';
+      case 'intimidate': return 'Intimidate';
+      default: return skillName;
+    }
+  };
+
   return (
     <div className="v17_8">
       <MenuBar />
@@ -114,11 +131,11 @@ function NewCharSkills() {
             .map(([skillName, value]) => (
               <div key={skillName} className="skill-item">
                 <span className="skill-name">
-                  {skillName.replace(/([A-Z])/g, " $1").trim()}
+                  {formatSkillName(skillName)}
                 </span>
                 <input
                   type="number"
-                  value={value || ""} // Show empty string instead of 0
+                  value={value || ""}
                   min={0}
                   max={99}
                   onChange={(e) =>
@@ -136,11 +153,11 @@ function NewCharSkills() {
             .map(([skillName, value]) => (
               <div key={skillName} className="skill-item">
                 <span className="skill-name">
-                  {skillName.replace(/([A-Z])/g, " $1").trim()}
+                  {formatSkillName(skillName)}
                 </span>
                 <input
                   type="number"
-                  value={value || ""} // Show empty string instead of 0
+                  value={value || ""}
                   min={0}
                   max={99}
                   onChange={(e) =>
