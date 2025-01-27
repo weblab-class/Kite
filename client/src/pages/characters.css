@@ -44,13 +44,11 @@ body,
 
 .v13_60 {
   width: 100%;
-  max-width: 718px;
+  max-width: 1200px;
   position: relative;
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   margin-top: 2rem;
 }
 
@@ -70,12 +68,22 @@ body,
   font-size: clamp(2.5rem, 4vw, 4rem);
   cursor: pointer;
   transition: transform 0.3s ease;
-  margin: 0 1rem;
+  white-space: nowrap;
+  padding: 10px 20px;
+  background: rgba(217, 217, 217, 0.1);
+  border-radius: 15px;
+  min-width: max-content;
+}
+
+.existing-characters:hover {
+  transform: scale(1.05);
+  background: rgba(217, 217, 217, 0.2);
 }
 
 .existing-characters.selected {
   color: #294e2e;
-  transform: scale(1.1);
+  transform: scale(1.05);
+  background: rgba(217, 217, 217, 0.3);
 }
 
 .v13_54 {
@@ -135,18 +143,21 @@ body,
   }
 
   .v13_60 {
-    flex-direction: column;
-    gap: 2rem;
+    padding: 1rem;
   }
 
-  .v13_59 {
-    margin-right: 0;
-    margin-bottom: 1rem;
+  .character-list-container {
+    margin: 10px 0;
+    padding: 10px 0;
   }
 
-  .existing-characters,
-  .v13_54 {
-    margin: 0.5rem 0;
+  .character-list {
+    gap: 20px;
+  }
+
+  .existing-characters {
+    font-size: clamp(2rem, 3vw, 3rem);
+    padding: 8px 16px;
   }
 }
 
@@ -198,4 +209,30 @@ body,
 
 .delete-mode .character-item:hover {
   background: rgba(200, 100, 100, 0.2);
+}
+
+/* Add new styles for character list container */
+.character-list-container {
+  width: 100%;
+  overflow-x: auto;
+  margin: 20px 0;
+  padding: 20px 0;
+  /* Hide scrollbar but keep functionality */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+/* Hide scrollbar for Chrome/Safari/Opera */
+.character-list-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Style the actual list */
+.character-list {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  padding: 0 20px;
+  min-width: min-content;  /* Ensure it can grow beyond container */
+  align-items: center;
 }
