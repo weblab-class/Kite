@@ -56,6 +56,10 @@ function NewCharPlayerInfo() {
   };
 
   const handleNext = () => {
+    if (isEditing) {
+      alert("Character information cannot be modified after creation");
+    }
+
     // Validate form data
     if (!formData.characterName || !formData.age || !formData.gender || !formData.playerName) {
       alert("Please enter every field");
@@ -68,7 +72,6 @@ function NewCharPlayerInfo() {
       alert("Please enter a number for the character's age");
       return;
     }
-
 
     // Convert age to number before sending
     const characterInfo = {
@@ -84,7 +87,7 @@ function NewCharPlayerInfo() {
       })
       .catch((error) => {
         console.error("Error saving character info:", error);
-        alert("Error saving character info. Please make sure all fields are valid.");
+        alert("Error saving character info. Please try again.");
       });
   };
 
