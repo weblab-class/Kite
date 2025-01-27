@@ -58,6 +58,12 @@ function NewCharSkills() {
   };
 
   const handleNext = async () => {
+    // Validate skills
+    if (remainingPoints > 0) {
+      alert("Please allocate all skill points");
+      return;
+    }
+
     try {
       // Update the character with skills
       post("/api/new-character", { skills: skills });

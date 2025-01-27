@@ -32,6 +32,17 @@ function NewCharPlayerInfo() {
   };
 
   const handleNext = () => {
+    // Validate form data
+    if (
+      !formData.characterName ||
+      !formData.age ||
+      !formData.gender ||
+      !formData.playerName
+    ) {
+      alert("Please enter every field");
+      return;
+    }
+
     post("/api/new-character", { new_character_info: formData });
     navigate("/new-character-stats");
   };

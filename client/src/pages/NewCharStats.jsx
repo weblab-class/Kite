@@ -40,6 +40,12 @@ function NewCharStats() {
   };
 
   const handleNext = () => {
+    // Validate stats
+    if (Object.values(stats).some((stat) => stat === 0)) {
+      alert("Please roll the dice to set all stats");
+      return;
+    }
+
     post("/api/new-character", { stats: stats })
       .then(() => {
         navigate("/new-character-skills");
