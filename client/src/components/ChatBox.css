@@ -51,13 +51,14 @@
   max-width: 85%;
   margin: 8px auto;
   padding: 10px 15px;
+  color: rgb(186, 186, 186);
   font-family: 'Pixelify Sans', sans-serif;
 }
 
 .message.history.user {
   background: rgba(159,159,159,0.15);
   align-self: center;
-  color: white;
+  
 }
 
 .message.history.assistant {
