@@ -141,6 +141,7 @@ function NewCharSkills() {
                   onChange={(e) =>
                     handleSkillChange(skillName, parseInt(e.target.value))
                   }
+                  disabled={isEditing}
                 />
               </div>
             ))}
@@ -163,6 +164,7 @@ function NewCharSkills() {
                   onChange={(e) =>
                     handleSkillChange(skillName, parseInt(e.target.value))
                   }
+                  disabled={isEditing}
                 />
               </div>
             ))}
