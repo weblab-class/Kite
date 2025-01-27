@@ -76,11 +76,8 @@ router.post("/new-character", auth.ensureLoggedIn, async (req, res) => {
   console.log("Received request body:", req.body);
   console.log("User:", req.user);
 
-  // Check if user is logged in
   if (!req.user) {
-    return res
-      .status(401)
-      .send({ error: "Must be logged in to create a character" });
+    return res.status(401).send({ error: "Must be logged in to create a character" });
   }
 
   try {
@@ -95,28 +92,12 @@ router.post("/new-character", auth.ensureLoggedIn, async (req, res) => {
         return res.status(404).send({ error: "Character not found" });
       }
 
-      // Update the appropriate fields based on what was sent
-      if (req.body.new_character_info) {
-        character.player_info = {
-          character_name: req.body.new_character_info.characterName || character.player_info.character_name,
-          age: req.body.new_character_info.age || character.player_info.age,
-          job: req.body.new_character_info.job || character.player_info.job,
-          gender: req.body.new_character_info.gender || character.player_info.gender,
-          player_name: req.body.new_character_info.playerName || character.player_info.player_name,
-        };
-      } else if (req.body.stats) {
-        character.stats = req.body.stats;
-      } else if (req.body.skills) {
-        character.skills = req.body.skills;
-      }
-
-      const updatedCharacter = await character.save();
-      return res.status(200).send(updatedCharacter);
+      // Instead of updating, just return the existing character
+      return res.status(200).send(character);
     }
     
-    // If we're creating a new character
+    // If we're creating a new character, continue with existing logic
     if (!characterInProgress && req.body.new_character_info) {
-      // First step: Creating new character with player info
       characterInProgress = new Character({
         googleid: req.user.googleid,
         player_info: {
@@ -128,12 +109,10 @@ router.post("/new-character", auth.ensureLoggedIn, async (req, res) => {
         },
       });
     } else if (characterInProgress && req.body.stats) {
-      // Second step: Adding stats
       characterInProgress.stats = req.body.stats;
     } else if (characterInProgress && req.body.skills) {
-      // Final step: Adding skills and saving to database
       characterInProgress.skills = req.body.skills;
-
+      
       // Save the character to MongoDB
       const savedCharacter = await characterInProgress.save();
       characterInProgress = null;
