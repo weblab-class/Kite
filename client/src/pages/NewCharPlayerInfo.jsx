@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import FormField from "../components/FormField";
 import "./newCharPlayerInfo.css";
@@ -18,10 +18,32 @@ function NewCharPlayerInfo() {
     job: character?.player_info?.job || "medium",
   });
 
+  useEffect(() => {
+    // Clear current character when starting new character creation
+    if (!isEditing) {
+      post("/api/start-new-character").catch(error => {
+        console.error("Error starting new character:", error);
+      });
+    }
+  }, [isEditing]);
+
   const handleInputChange = (field) => (event) => {
+    let value = event.target.value;
+    
+    // Special handling for age field
+    if (field === "age") {
+      // Remove any non-numeric characters
+      value = value.replace(/[^0-9]/g, '');
+      
+      if (value && isNaN(parseInt(value))) {
+        alert("Please enter a valid number for age");
+        return;
+      }
+    }
+
     setFormData({
       ...formData,
-      [field]: event.target.value,
+      [field]: value,
     });
   };
 
@@ -40,7 +62,21 @@ function NewCharPlayerInfo() {
       return;
     }
 
-    post("/api/new-character", { new_character_info: formData })
+    // Enhanced age validation with better user feedback
+    const age = parseInt(formData.age);
+    if (isNaN(age)) {
+      alert("Please enter a number for the character's age");
+      return;
+    }
+
+
+    // Convert age to number before sending
+    const characterInfo = {
+      ...formData,
+      age: age
+    };
+
+    post("/api/new-character", { new_character_info: characterInfo })
       .then((updatedCharacter) => {
         navigate("/new-character-stats", { 
           state: { character: updatedCharacter, isEditing } 
@@ -48,6 +84,7 @@ function NewCharPlayerInfo() {
       })
       .catch((error) => {
         console.error("Error saving character info:", error);
+        alert("Error saving character info. Please make sure all fields are valid.");
       });
   };
 
@@ -66,6 +103,10 @@ function NewCharPlayerInfo() {
           value={formData.age}
           onChange={handleInputChange("age")}
           position="age"
+          type="number"
+          min="1"
+          max="120"
+          placeholder="Enter age (1-120)"
         />
         <div className="form-field">
           <label className="form-label">Job:</label>

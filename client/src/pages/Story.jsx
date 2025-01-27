@@ -68,11 +68,12 @@ function Story() {
       }));
 
       const response = await post("/api/chat", {
-        prompt: option,
+        prompt: "Continue the story based on the previous conversation",
         messageHistory: formattedHistory,
       });
 
       const aiMessage = { role: "assistant", content: response.response };
+      // Only add visible messages to the state
       setMessages((prev) => [...prev, aiMessage]);
       setOptions(response.options);
     } catch (error) {

@@ -9,13 +9,14 @@ import "./FormField.css";
  * @param {string} value The input value
  * @param {string} position The position identifier
  * @param {function} onChange Handler for input changes
+ * @param {string} type The input type (default: "text")
  */
-const FormField = ({ label, value, position, onChange }) => {
+const FormField = ({ label, value, position, onChange, type = "text" }) => {
   return (
-    <div className="form-field">
+    <div className={`form-field ${position}`}>
       <label className="form-label">{label}</label>
       <input
-        type="text"
+        type={type}
         className="form-input"
         value={value}
         onChange={onChange}

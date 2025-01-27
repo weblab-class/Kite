@@ -115,23 +115,22 @@ router.post("/new-character", auth.ensureLoggedIn, async (req, res) => {
     }
     
     // If we're creating a new character
-    if (!characterInProgress) {
-      const new_character_info = req.body.new_character_info;
+    if (!characterInProgress && req.body.new_character_info) {
       // First step: Creating new character with player info
       characterInProgress = new Character({
         googleid: req.user.googleid,
         player_info: {
-          character_name: new_character_info.characterName || "",
-          age: new_character_info.age || "",
-          job: new_character_info.job || "medium",
-          gender: new_character_info.gender || "",
-          player_name: new_character_info.playerName || "",
+          character_name: req.body.new_character_info.characterName || "",
+          age: req.body.new_character_info.age || "",
+          job: req.body.new_character_info.job || "medium",
+          gender: req.body.new_character_info.gender || "",
+          player_name: req.body.new_character_info.playerName || "",
         },
       });
-    } else if (req.body.stats) {
+    } else if (characterInProgress && req.body.stats) {
       // Second step: Adding stats
       characterInProgress.stats = req.body.stats;
-    } else if (req.body.skills) {
+    } else if (characterInProgress && req.body.skills) {
       // Final step: Adding skills and saving to database
       characterInProgress.skills = req.body.skills;
 
@@ -147,6 +146,13 @@ router.post("/new-character", auth.ensureLoggedIn, async (req, res) => {
     console.error("Error handling character:", err);
     res.status(500).send({ error: "Error handling character" });
   }
+});
+
+// Add a route to clear current character ID when starting new character creation
+router.post("/start-new-character", auth.ensureLoggedIn, (req, res) => {
+  currentCharacterId = null;
+  characterInProgress = null;
+  res.status(200).send({ message: "Ready for new character creation" });
 });
 
 router.get("/new-character", auth.ensureLoggedIn, (req, res) => {

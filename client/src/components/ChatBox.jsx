@@ -19,13 +19,19 @@ function ChatBox({ messages, options, isLoading, handleOptionSelect }) {
     }
   };
 
+  // Filter out both system prompts
+  const displayMessages = messages.filter(message => 
+    message.content !== "Continue the story based on the previous conversation" &&
+    message.content !== "Start a new detective story in the foggy city"
+  );
+
   return (
     <div className="chatbox">
       <div className="chat-messages">
-        {messages.map((message, index) => (
+        {displayMessages.map((message, index) => (
           <div 
             key={index} 
-            className={`message ${message.role} ${index < messages.length - 2 ? 'history' : ''}`}
+            className={`message ${message.role} ${index < displayMessages.length - 2 ? 'history' : ''}`}
           >
             {message.content}
           </div>
