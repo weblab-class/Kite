@@ -28,10 +28,6 @@ function NewCharStats() {
   };
 
   const handleDiceClick = () => {
-    if (isEditing) {
-      alert("Stats cannot be modified after character creation");
-    }
-    
     setStats({
       strength: generateRandomStat(15, 90),
       constitution: generateRandomStat(15, 90),
@@ -46,9 +42,6 @@ function NewCharStats() {
   };
 
   const handleNext = () => {
-    if (isEditing) {
-      alert("Stats cannot be modified after character creation");
-    }
 
     // Validate stats only if creating new character
     if (!isEditing && Object.values(stats).some((stat) => stat === 0)) {
