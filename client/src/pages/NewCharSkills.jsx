@@ -42,16 +42,19 @@ function NewCharSkills() {
   // Calculate remaining points based on used points
   const [remainingPoints, setRemainingPoints] = useState(() => {
     if (character?.skills) {
-      const usedPoints = Object.values(character.skills).reduce((sum, val) => sum + val, 0);
+      const usedPoints = Object.values(character.skills).reduce(
+        (sum, val) => sum + val,
+        0
+      );
       return skillPoints - usedPoints;
     }
     return skillPoints;
   });
 
   const handleSkillChange = (skillName, newValue) => {
-    // Ensure newValue is a number
-    const numValue = parseInt(newValue) || 0;
-    
+    // Ensure newValue is a number and cap it at 90
+    const numValue = Math.min(parseInt(newValue) || 0, 90);
+
     // Calculate total points used with the new value
     const pointsUsed = Object.entries(skills).reduce(
       (total, [key, value]) => total + (key === skillName ? numValue : value),
@@ -76,11 +79,15 @@ function NewCharSkills() {
     }
 
     try {
-      const updatedCharacter = await post("/api/new-character", { skills: skills });
-      
+      const updatedCharacter = await post("/api/new-character", {
+        skills: skills,
+      });
+
       // Navigate back to character details if editing, otherwise to story
       if (isEditing) {
-        navigate("/character-details", { state: { characterId: updatedCharacter._id } });
+        navigate("/character-details", {
+          state: { characterId: updatedCharacter._id },
+        });
       } else {
         navigate("/story");
       }
@@ -107,7 +114,7 @@ function NewCharSkills() {
                 </span>
                 <input
                   type="number"
-                  value={value || ""}  // Show empty string instead of 0
+                  value={value || ""} // Show empty string instead of 0
                   min={0}
                   max={99}
                   onChange={(e) =>
@@ -129,7 +136,7 @@ function NewCharSkills() {
                 </span>
                 <input
                   type="number"
-                  value={value || ""}  // Show empty string instead of 0
+                  value={value || ""} // Show empty string instead of 0
                   min={0}
                   max={99}
                   onChange={(e) =>

@@ -82,6 +82,10 @@ body {
   text-align: left;
   flex: 1;
   min-width: 150px;
+  background-image: url("../images/scroll.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .next-button {
@@ -134,6 +138,11 @@ body {
   flex-direction: column;
   align-items: center;
   margin: 10px;
+  background-image: url("../images/scroll.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 40px; /* Adjust padding as needed */
 }
 
 .skill-item input {
@@ -141,9 +150,9 @@ body {
   text-align: center;
   margin-top: 5px;
   padding: 5px;
-  background-color: rgba(42, 58, 68, 1);
+  background-color: transparent;
   border: 1px solid rgba(159, 159, 159, 1);
-  color: white;
+  color: rgba(42, 58, 68, 1);
   font-family: "Pixelify Sans", sans-serif;
   font-size: 1.2rem;
 }
@@ -155,7 +164,7 @@ body {
 
 .skill-name {
   margin-bottom: 5px;
-  color: white;
+  color: rgba(42, 58, 68, 1);
   font-family: "Pixelify Sans", sans-serif;
   font-size: 1.2rem;
 }
