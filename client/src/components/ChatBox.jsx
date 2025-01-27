@@ -25,7 +25,7 @@ function ChatBox({ messages, options, isLoading, handleOptionSelect }) {
         {messages.map((message, index) => (
           <div 
             key={index} 
-            className={`message ${message.role}`}
+            className={`message ${message.role} ${index < messages.length - 2 ? 'history' : ''}`}
           >
             {message.content}
           </div>

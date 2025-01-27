@@ -173,6 +173,22 @@ body {
   color: #ff6b6b;
 }
 
+.message.history {
+  max-width: 85%;
+  margin: 8px auto;
+  padding: 10px 15px;
+}
+
+.message.history.user {
+  background: rgba(159,159,159,0.15);  /* Lighter background for history messages */
+  align-self: center;
+}
+
+.message.history.assistant {
+  background: rgba(159,159,159,0.25);  /* Lighter background for history messages */
+  align-self: center;
+}
+
 .chat-input {
   display: flex;
   padding: 10px;

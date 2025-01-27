@@ -47,6 +47,25 @@
   color: #ff6b6b;
 }
 
+.message.history {
+  max-width: 85%;
+  margin: 8px auto;
+  padding: 10px 15px;
+  font-family: 'Pixelify Sans', sans-serif;
+}
+
+.message.history.user {
+  background: rgba(159,159,159,0.15);
+  align-self: center;
+  color: white;
+}
+
+.message.history.assistant {
+  background: rgba(159,159,159,0.25);
+  align-self: center;
+  color: white;
+}
+
 .loading-dots {
   display: flex;
   justify-content: center;
