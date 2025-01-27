@@ -72,7 +72,7 @@ router.get("/characters", auth.ensureLoggedIn, (req, res) => {
     });
 });
 
-router.post("/new-character", auth.ensureLoggedIn, (req, res) => {
+router.post("/new-character", auth.ensureLoggedIn, async (req, res) => {
   console.log("Received request body:", req.body);
   console.log("User:", req.user);
 
@@ -83,45 +83,70 @@ router.post("/new-character", auth.ensureLoggedIn, (req, res) => {
       .send({ error: "Must be logged in to create a character" });
   }
 
-  if (!characterInProgress) {
-    console.log("Creating new character");
-    const new_character_info = req.body.new_character_info;
-    // First step: Creating new character with player info
-    characterInProgress = new Character({
-      googleid: req.user.googleid,
-      player_info: {
-        character_name: new_character_info.characterName || "",
-        age: new_character_info.age || "",
-        job: new_character_info.job || "medium",
-        gender: new_character_info.gender || "",
-        player_name: new_character_info.playerName || "",
-      },
-    });
-  } else if (req.body.stats) {
-    // Second step: Adding stats
-    console.log("Adding stats:", req.body.stats);
-    characterInProgress.stats = req.body.stats;
-  } else if (req.body.skills) {
-    // Final step: Adding skills and saving to database
-    console.log("Adding skills:", req.body.skills);
-    characterInProgress.skills = req.body.skills;
-
-    // Save the character to MongoDB
-    return characterInProgress
-      .save()
-      .then((savedCharacter) => {
-        const completedCharacter = savedCharacter;
-        characterInProgress = null;
-        currentCharacterId = completedCharacter._id; // Set current character ID
-        return res.status(201).send(completedCharacter);
-      })
-      .catch((err) => {
-        console.log("Error saving character:", err);
-        return res.status(500).send({ error: "Error saving character" });
+  try {
+    // If we're editing an existing character
+    if (currentCharacterId) {
+      const character = await Character.findOne({ 
+        _id: currentCharacterId, 
+        googleid: req.user.googleid 
       });
-  }
 
-  res.status(200).send(characterInProgress);
+      if (!character) {
+        return res.status(404).send({ error: "Character not found" });
+      }
+
+      // Update the appropriate fields based on what was sent
+      if (req.body.new_character_info) {
+        character.player_info = {
+          character_name: req.body.new_character_info.characterName || character.player_info.character_name,
+          age: req.body.new_character_info.age || character.player_info.age,
+          job: req.body.new_character_info.job || character.player_info.job,
+          gender: req.body.new_character_info.gender || character.player_info.gender,
+          player_name: req.body.new_character_info.playerName || character.player_info.player_name,
+        };
+      } else if (req.body.stats) {
+        character.stats = req.body.stats;
+      } else if (req.body.skills) {
+        character.skills = req.body.skills;
+      }
+
+      const updatedCharacter = await character.save();
+      return res.status(200).send(updatedCharacter);
+    }
+    
+    // If we're creating a new character
+    if (!characterInProgress) {
+      const new_character_info = req.body.new_character_info;
+      // First step: Creating new character with player info
+      characterInProgress = new Character({
+        googleid: req.user.googleid,
+        player_info: {
+          character_name: new_character_info.characterName || "",
+          age: new_character_info.age || "",
+          job: new_character_info.job || "medium",
+          gender: new_character_info.gender || "",
+          player_name: new_character_info.playerName || "",
+        },
+      });
+    } else if (req.body.stats) {
+      // Second step: Adding stats
+      characterInProgress.stats = req.body.stats;
+    } else if (req.body.skills) {
+      // Final step: Adding skills and saving to database
+      characterInProgress.skills = req.body.skills;
+
+      // Save the character to MongoDB
+      const savedCharacter = await characterInProgress.save();
+      characterInProgress = null;
+      currentCharacterId = savedCharacter._id;
+      return res.status(201).send(savedCharacter);
+    }
+
+    res.status(200).send(characterInProgress);
+  } catch (err) {
+    console.error("Error handling character:", err);
+    res.status(500).send({ error: "Error handling character" });
+  }
 });
 
 router.get("/new-character", auth.ensureLoggedIn, (req, res) => {

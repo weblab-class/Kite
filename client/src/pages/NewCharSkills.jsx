@@ -57,8 +57,14 @@ function NewCharSkills() {
 
     try {
       // Update the character with skills
-      post("/api/new-character", { skills: skills });
-      navigate("/story");
+      const updatedCharacter = await post("/api/new-character", { skills: skills });
+      
+      // Navigate back to character details if editing, otherwise to story
+      if (isEditing) {
+        navigate("/character-details", { state: { characterId: updatedCharacter._id } });
+      } else {
+        navigate("/story");
+      }
     } catch (error) {
       console.error("Error saving skills:", error);
     }

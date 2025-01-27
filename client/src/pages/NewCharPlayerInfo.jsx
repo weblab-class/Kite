@@ -35,18 +35,20 @@ function NewCharPlayerInfo() {
 
   const handleNext = () => {
     // Validate form data
-    if (
-      !formData.characterName ||
-      !formData.age ||
-      !formData.gender ||
-      !formData.playerName
-    ) {
+    if (!formData.characterName || !formData.age || !formData.gender || !formData.playerName) {
       alert("Please enter every field");
       return;
     }
 
-    post("/api/new-character", { new_character_info: formData });
-    navigate("/new-character-stats");
+    post("/api/new-character", { new_character_info: formData })
+      .then((updatedCharacter) => {
+        navigate("/new-character-stats", { 
+          state: { character: updatedCharacter, isEditing } 
+        });
+      })
+      .catch((error) => {
+        console.error("Error saving character info:", error);
+      });
   };
 
   return (

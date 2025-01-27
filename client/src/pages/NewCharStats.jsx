@@ -49,8 +49,10 @@ function NewCharStats() {
     }
 
     post("/api/new-character", { stats: stats })
-      .then(() => {
-        navigate("/new-character-skills");
+      .then((updatedCharacter) => {
+        navigate("/new-character-skills", { 
+          state: { character: updatedCharacter, isEditing } 
+        });
       })
       .catch((error) => {
         console.error("Error saving stats:", error);
