@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./newCharStats.css";
 import MenuBar from "../components/MenuBar";
 import { post } from "../utilities.js";
 
 function NewCharStats() {
   const navigate = useNavigate();
-  const [stats, setStats] = useState({
+  const location = useLocation();
+  const { character, isEditing } = location.state || {};
+  const [stats, setStats] = useState(character?.stats || {
     strength: 0,
     constitution: 0,
     size: 0,

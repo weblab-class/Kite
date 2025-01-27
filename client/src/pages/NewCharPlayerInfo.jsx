@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import FormField from "../components/FormField";
 import "./newCharPlayerInfo.css";
 import { post } from "../utilities.js";
@@ -7,13 +7,15 @@ import MenuBar from "../components/MenuBar";
 
 function NewCharPlayerInfo() {
   const navigate = useNavigate();
-  const [selectedJob, setSelectedJob] = useState("medium");
+  const location = useLocation();
+  const { character, isEditing } = location.state || {};
+  const [selectedJob, setSelectedJob] = useState(character?.player_info?.job || "medium");
   const [formData, setFormData] = useState({
-    characterName: "",
-    age: "",
-    gender: "",
-    playerName: "",
-    job: "medium",
+    characterName: character?.player_info?.character_name || "",
+    age: character?.player_info?.age || "",
+    gender: character?.player_info?.gender || "",
+    playerName: character?.player_info?.player_name || "",
+    job: character?.player_info?.job || "medium",
   });
 
   const handleInputChange = (field) => (event) => {

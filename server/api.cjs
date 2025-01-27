@@ -165,6 +165,7 @@ router.get("/current-character", auth.ensureLoggedIn, (req, res) => {
         currentCharacterId = null;
         return res.status(404).send({ error: "Character not found" });
       }
+      console.log("age is ", character.player_info.age);
       res.status(200).send(character);
     })
     .catch((err) => {

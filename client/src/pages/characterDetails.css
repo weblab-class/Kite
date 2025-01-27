@@ -1,0 +1,30 @@
+.character-options {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  padding: 20px;
+}
+
+.character-option {
+  width: 200px;
+  height: 50px;
+  background: rgba(217, 217, 217, 0.30);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 24px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.character-option:hover {
+  background: rgba(217, 217, 217, 0.45);
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+} 

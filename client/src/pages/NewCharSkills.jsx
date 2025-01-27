@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./newCharSkills.css";
 import MenuBar from "../components/MenuBar";
 import { get, post } from "../utilities.js";
 
 function NewCharSkills() {
   const navigate = useNavigate();
-  const [skillPoints, setSkillPoints] = useState(0);
-  const [remainingPoints, setRemainingPoints] = useState(0);
-  const [skills, setSkills] = useState({
+  const location = useLocation();
+  const { character, isEditing } = location.state || {};
+  const [skillPoints, setSkillPoints] = useState(character?.stats?.education * 4 || 0);
+  const [skills, setSkills] = useState(character?.skills || {
     libraryUse: 0,
     listen: 0,
     firstAid: 0,
@@ -21,24 +22,14 @@ function NewCharSkills() {
     intimidate: 0,
   });
 
-  useEffect(() => {
-    // Fetch the in-progress character data from the backend
-    const fetchCharacterData = async () => {
-      try {
-        const character = await get("/api/new-character");
-
-        if (character && character.stats) {
-          const totalPoints = character.stats.education * 4;
-          setSkillPoints(totalPoints);
-          setRemainingPoints(totalPoints);
-        }
-      } catch (error) {
-        console.error("Error fetching character data:", error);
-      }
-    };
-
-    fetchCharacterData();
-  }, []);
+  // Calculate remaining points based on initial skills
+  const [remainingPoints, setRemainingPoints] = useState(() => {
+    if (character?.skills) {
+      const usedPoints = Object.values(character.skills).reduce((sum, val) => sum + val, 0);
+      return (character.stats.education * 4) - usedPoints;
+    }
+    return skillPoints;
+  });
 
   const handleSkillChange = (skillName, newValue) => {
     // Calculate total points used with the new value

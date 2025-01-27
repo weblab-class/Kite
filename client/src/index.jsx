@@ -10,6 +10,7 @@ import NewCharPlayerInfo from "./pages/NewCharPlayerInfo";
 import NewCharStats from "./pages/NewCharStats";
 import NewCharSkills from "./pages/NewCharSkills";
 import Story from "./pages/Story";
+import CharacterDetails from "./pages/CharacterDetails";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -31,6 +32,7 @@ const router = createBrowserRouter(
       <Route path="/new-character-stats" element={<NewCharStats />} />
       <Route path="/new-character-skills" element={<NewCharSkills />} />
       <Route path="/story" element={<Story />} />
+      <Route path="/character-details" element={<CharacterDetails />} />
     </Route>
   )
 );
