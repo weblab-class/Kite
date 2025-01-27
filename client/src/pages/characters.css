@@ -131,11 +131,12 @@ body,
 }
 
 .find_character {
-  color: rgba(8, 24, 34, 1);
+  color: rgba(200, 200, 200, 1);
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   font-family: "Pixelify Sans", sans-serif;
   font-size: clamp(2rem, 3vw, 3rem);
-  padding: 2rem;
+  text-align: center;
+  padding: 1rem;
 }
 
 /* Media queries for better mobile responsiveness */
@@ -249,4 +250,10 @@ body,
   margin-bottom: 10px;
   align-items: center;
   order: 1;
+}
+
+/* Add red highlight for characters in delete mode */
+.character-list-container.delete-mode .existing-characters:hover {
+  background: rgba(255, 100, 100, 0.2);
+  color: rgb(255, 150, 150);
 }

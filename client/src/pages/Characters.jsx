@@ -93,13 +93,15 @@ function Characters() {
         <div className="v13_60">
           <div className="v13_59"></div>
           {isDeleting ? (
-            <div className="delete-instructions">
-              <div className="find_character">Select a character to delete</div>
-              {charactersList}
-              <div className="v13_61" onClick={() => setIsDeleting(false)}>
-                Cancel
+            <>
+              <div className="character-actions">
+                <div className="find_character">Select a character to delete</div>
+                <div className="v13_61" onClick={() => setIsDeleting(false)}>
+                  Cancel
+                </div>
               </div>
-            </div>
+              {charactersList}
+            </>
           ) : (
             <>
               <div className="character-actions">
