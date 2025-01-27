@@ -213,12 +213,29 @@ router.post("/chat", auth.ensureLoggedIn, async (req, res) => {
     console.log("Prompt:", prompt);
     console.log("Message history length:", messageHistory?.length || 0);
 
+    // Get current character info
+    const character = await Character.findOne({ 
+      _id: currentCharacterId, 
+      googleid: req.user.googleid 
+    });
+
+    if (!character) {
+      throw new Error("No character found");
+    }
+
     // Format messages for OpenAI
     const formattedMessages = [
       {
         role: "system",
         content:
-          "You are a storytelling AI that creates engaging narrative responses. You are continuing a detective story set in a foggy city in the 1920s. Maintain consistency with the previous conversation and add new dramatic elements to keep the story engaging (<= 150 words)",
+          `You are a storytelling AI that creates engaging narrative responses in second person perspective. 
+           You are telling a detective story set in a foggy city in the 1920s. 
+           The main character is ${character.player_info.character_name}, a ${character.player_info.age}-year-old ${character.player_info.job}.
+           Always address the player as "you" and use ${character.player_info.character_name} as the character name frequently.
+           Consider their stats (STR:${character.stats.strength}, DEX:${character.stats.dexterity}, INT:${character.stats.intelligence}, 
+           CON:${character.stats.constitution}, APP:${character.stats.appearance}, POW:${character.stats.power}, 
+           EDU:${character.stats.education}, SIZ:${character.stats.size}) and skills when crafting the story.
+           Keep responses engaging and dramatic (<= 150 words).`,
       },
       ...(messageHistory || []),
       { role: "user", content: prompt },
