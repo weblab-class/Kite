@@ -63,17 +63,23 @@ function Characters() {
   let charactersList = null;
   const hasCharacters = characters.length !== 0;
   if (hasCharacters) {
-    charactersList = characters.map((character) => (
-      <span
-        key={`Character_${character._id}`}
-        className={`existing-characters ${
-          character._id === selectedCharacterId ? "selected" : ""
-        }`}
-        onClick={() => handleCharacterSelect(character._id)}
-      >
-        {character.player_info.character_name}
-      </span>
-    ));
+    charactersList = (
+      <div className="character-list-container">
+        <div className="character-list">
+          {characters.map((character) => (
+            <span
+              key={`Character_${character._id}`}
+              className={`existing-characters ${
+                character._id === selectedCharacterId ? "selected" : ""
+              }`}
+              onClick={() => handleCharacterSelect(character._id)}
+            >
+              {character.player_info.character_name}
+            </span>
+          ))}
+        </div>
+      </div>
+    );
   } else {
     charactersList = (
       <span className="find_character">No characters found</span>
