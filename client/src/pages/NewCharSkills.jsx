@@ -1,40 +1,60 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./newCharSkills.css";
 import MenuBar from "../components/MenuBar";
-import { get, post } from "../utilities.js";
+import { post } from "../utilities.js";
 
 function NewCharSkills() {
   const navigate = useNavigate();
   const location = useLocation();
   const { character, isEditing } = location.state || {};
-  const [skillPoints, setSkillPoints] = useState(character?.stats?.education * 4 || 0);
-  const [skills, setSkills] = useState(character?.skills || {
-    libraryUse: 0,
-    listen: 0,
-    firstAid: 0,
-    medicine: 0,
-    fighting: 0,
-    psychology: 0,
-    dodge: 0,
-    spotHidden: 0,
-    stealth: 0,
-    intimidate: 0,
+
+  // Initialize skillPoints based on character's education
+  const [skillPoints, setSkillPoints] = useState(() => {
+    if (character?.stats?.education) {
+      return character.stats.education * 4;
+    }
+    return 0;
   });
 
-  // Calculate remaining points based on initial skills
+  // Initialize skills with existing values or defaults
+  const [skills, setSkills] = useState(() => {
+    const defaultSkills = {
+      libraryUse: 0,
+      listen: 0,
+      firstAid: 0,
+      medicine: 0,
+      fighting: 0,
+      psychology: 0,
+      dodge: 0,
+      spotHidden: 0,
+      stealth: 0,
+      intimidate: 0,
+    };
+
+    // If editing, use existing skills
+    if (character?.skills) {
+      return { ...defaultSkills, ...character.skills };
+    }
+    return defaultSkills;
+  });
+
+  // Calculate remaining points based on used points
   const [remainingPoints, setRemainingPoints] = useState(() => {
     if (character?.skills) {
       const usedPoints = Object.values(character.skills).reduce((sum, val) => sum + val, 0);
-      return (character.stats.education * 4) - usedPoints;
+      return skillPoints - usedPoints;
     }
     return skillPoints;
   });
 
   const handleSkillChange = (skillName, newValue) => {
+    // Ensure newValue is a number
+    const numValue = parseInt(newValue) || 0;
+    
     // Calculate total points used with the new value
     const pointsUsed = Object.entries(skills).reduce(
-      (total, [key, value]) => total + (key === skillName ? newValue : value),
+      (total, [key, value]) => total + (key === skillName ? numValue : value),
       0
     );
 
@@ -42,7 +62,7 @@ function NewCharSkills() {
     if (pointsUsed <= skillPoints) {
       setSkills({
         ...skills,
-        [skillName]: newValue,
+        [skillName]: numValue,
       });
       setRemainingPoints(skillPoints - pointsUsed);
     }
@@ -56,7 +76,6 @@ function NewCharSkills() {
     }
 
     try {
-      // Update the character with skills
       const updatedCharacter = await post("/api/new-character", { skills: skills });
       
       // Navigate back to character details if editing, otherwise to story
@@ -88,7 +107,7 @@ function NewCharSkills() {
                 </span>
                 <input
                   type="number"
-                  value={value}
+                  value={value || ""}  // Show empty string instead of 0
                   min={0}
                   max={99}
                   onChange={(e) =>
@@ -110,7 +129,7 @@ function NewCharSkills() {
                 </span>
                 <input
                   type="number"
-                  value={value}
+                  value={value || ""}  // Show empty string instead of 0
                   min={0}
                   max={99}
                   onChange={(e) =>
