@@ -230,12 +230,24 @@ router.post("/chat", auth.ensureLoggedIn, async (req, res) => {
         content:
           `You are a storytelling AI that creates engaging narrative responses in second person perspective. 
            You are telling a detective story set in a foggy city in the 1920s. 
-           The main character is ${character.player_info.character_name}, a ${character.player_info.age}-year-old ${character.player_info.job}.
+           The main character is ${character.player_info.character_name}.
            Always address the player as "you" and use ${character.player_info.character_name} as the character name frequently.
-           Consider their stats (STR:${character.stats.strength}, DEX:${character.stats.dexterity}, INT:${character.stats.intelligence}, 
-           CON:${character.stats.constitution}, APP:${character.stats.appearance}, POW:${character.stats.power}, 
-           EDU:${character.stats.education}, SIZ:${character.stats.size}) and skills when crafting the story.
-           Keep responses engaging and dramatic (<= 150 words).`,
+           Consider their stats (strength:${character.stats.strength}, dexterity:${character.stats.dexterity}, sanity: ${character.stats.wisdom}, 
+           physical condition:${character.stats.constitution}, appearance:${character.stats.appearance}, power:${character.stats.power}, 
+           education:${character.stats.education}, physical size:${character.stats.size}, luck: ${character.stats.luck}). 
+           Sometimes you will come up with a specific event that will happen to ${character.player_info.character_name}. 
+           The outcome of the event will be determined by one specific stat value of ${character.player_info.character_name} 
+           (one of strength, dexterity, sanity, constitution, appearance, power, education, size, or luck). To determine the outcome (good/bad), 
+           compare the stat value to a random number between 1 and 100. If the stat value is greater than the random number, the outcome is bad. 
+           Otherwise, the outcome is good.
+           If the player decides to use any skills in their inputs (libraryUse:${character.skills.libraryUse}, listen:${character.skills.listen}, firstAid:${character.skills.firstAid}, 
+           medicine:${character.skills.medicine}, fighting:${character.skills.fighting}, psychology: ${character.skills.psychology}),
+           dodge:${character.skills.dodge}, spotHidden: ${character.skills.spotHidden}, stealth:${character.skills.stealth}, intimidate:${character.skills.intimidate}),
+           you should use the skill value to determine the outcome of the event. Again, 
+           compare the skill value to a random number between 1 and 100. If the skill value is greater than the random number, the outcome is bad. 
+           Otherwise, the outcome is good.
+           Keep responses engaging and dramatic. You should only explicity mention the stats or skill name in the last few lines of your response. You
+           should be in storytelling mode before the last lines. (<= 150 words)`,
       },
       ...(messageHistory || []),
       { role: "user", content: prompt },
@@ -261,6 +273,12 @@ router.post("/chat", auth.ensureLoggedIn, async (req, res) => {
 
     // Second AI agent - Options Generation
     const optionsPrompt = `Based on this story, generate 4 distinct and interesting options for what the user could do next. Each option should be a complete sentence starting with an action verb.
+     Consider the character skills 
+           (libraryUse:${character.skills.libraryUse}, listen:${character.skills.listen}, firstAid:${character.skills.firstAid}, 
+           medicine:${character.skills.medicine}, fighting:${character.skills.fighting}, psychology: ${character.skills.psychology}),
+           dodge:${character.skills.dodge}, spotHidden: ${character.skills.spotHidden}, stealth:${character.skills.stealth}, intimidate:${character.skills.intimidate}). 
+           If the value of a skill is nonzero, you may come up with an option that uses that skill. 
+           If the value of a skill is zero, you should not come up with an option that uses that skill.
 
     Story so far:
     ${updatedMessageHistory.map((m) => `${m.role}: ${m.content}`).join("\n")}
