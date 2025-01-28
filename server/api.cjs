@@ -253,7 +253,7 @@ router.post("/chat", auth.ensureLoggedIn, async (req, res) => {
 
     console.log("Sending request to OpenAI...");
     const chatCompletion = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4o",
       messages: formattedMessages,
       temperature: 0.7,
       max_tokens: 500,
@@ -293,7 +293,7 @@ router.post("/chat", auth.ensureLoggedIn, async (req, res) => {
     Generate 4 options:`;
 
     const optionsCompletion = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4o",
       messages: [
         {
           role: "system",

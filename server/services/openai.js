@@ -7,7 +7,7 @@ const openai = new OpenAI({
 export async function generateResponse(prompt) {
     try {
         const completion = await openai.chat.completions.create({
-            model: "gpt-4",
+            model: "gpt-4o",
             messages: [
                 {"role": "user", "content": prompt}
             ]
