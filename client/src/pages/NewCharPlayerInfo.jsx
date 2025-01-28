@@ -9,7 +9,9 @@ function NewCharPlayerInfo() {
   const navigate = useNavigate();
   const location = useLocation();
   const { character, isEditing } = location.state || {};
-  const [selectedJob, setSelectedJob] = useState(character?.player_info?.job || "medium");
+  const [selectedJob, setSelectedJob] = useState(
+    character?.player_info?.job || "medium"
+  );
   const [formData, setFormData] = useState({
     characterName: character?.player_info?.character_name || "",
     age: character?.player_info?.age || "",
@@ -21,7 +23,7 @@ function NewCharPlayerInfo() {
   useEffect(() => {
     // Clear current character when starting new character creation
     if (!isEditing) {
-      post("/api/start-new-character").catch(error => {
+      post("/api/start-new-character").catch((error) => {
         console.error("Error starting new character:", error);
       });
     }
@@ -29,12 +31,12 @@ function NewCharPlayerInfo() {
 
   const handleInputChange = (field) => (event) => {
     let value = event.target.value;
-    
+
     // Special handling for age field
     if (field === "age") {
       // Remove any non-numeric characters
-      value = value.replace(/[^0-9]/g, '');
-      
+      value = value.replace(/[^0-9]/g, "");
+
       if (value && isNaN(parseInt(value))) {
         alert("Please enter a valid number for age");
         return;
@@ -56,9 +58,13 @@ function NewCharPlayerInfo() {
   };
 
   const handleNext = () => {
-
     // Validate form data
-    if (!formData.characterName || !formData.age || !formData.gender || !formData.playerName) {
+    if (
+      !formData.characterName ||
+      !formData.age ||
+      !formData.gender ||
+      !formData.playerName
+    ) {
       alert("Please enter every field");
       return;
     }
@@ -73,13 +79,13 @@ function NewCharPlayerInfo() {
     // Convert age to number before sending
     const characterInfo = {
       ...formData,
-      age: age
+      age: age,
     };
 
     post("/api/new-character", { new_character_info: characterInfo })
       .then((updatedCharacter) => {
-        navigate("/new-character-stats", { 
-          state: { character: updatedCharacter, isEditing } 
+        navigate("/new-character-stats", {
+          state: { character: updatedCharacter, isEditing },
         });
       })
       .catch((error) => {
@@ -107,7 +113,7 @@ function NewCharPlayerInfo() {
           type="number"
           min="1"
           max="120"
-          placeholder="Enter age (1-120)"
+          placeholder="(1-120)"
           disabled={isEditing}
         />
         <div className="form-field">
