@@ -19,7 +19,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  overflow-y: auto;  /* Allow vertical scrolling if needed */
+  overflow-y: auto; /* Allow vertical scrolling if needed */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,17 +87,18 @@ body {
   flex-direction: column;
   align-items: center;
   aspect-ratio: 1.2;
-  justify-content: center;  /* Center content vertically */
-  margin-bottom: 0.5vh;  /* For absolute positioning of input if needed */
+  justify-content: center; /* Center content vertically */
+  margin-bottom: 0.5vh; /* For absolute positioning of input if needed */
 }
 
 .skill-name {
   color: rgba(159, 159, 159, 1);
   font-family: "Pixelify Sans", sans-serif;
-  font-size: clamp(1rem, 1.2vw, 1rem);
+  font-size: clamp(1.2rem, 1.5vw, 1.5rem);
   text-align: center;
-  margin-bottom: 0vh;  /* Increased from 0.5vh for better spacing */
+  margin-bottom: 0vh;
   font-weight: bold;
+  transform: translateY(-10px);
 }
 
 .skill-item input {
@@ -170,4 +171,10 @@ body {
   cursor: not-allowed;
   opacity: 0.7;
   border-color: rgba(159, 159, 159, 0.5);
+}
+
+.instruction-text {
+  max-width: 600px; /* Adjust the width as needed */
+  margin: 0 auto; /* Center the text */
+  text-align: center; /* Center the text content */
 }
